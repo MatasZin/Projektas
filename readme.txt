@@ -1,3 +1,3 @@
-Mantas Savickas IFA-6
-Matas Zinka IFA-6
-Paulius Adamonis IFA-6
+Mantas Savickas     IFA-6, github_name: SavickasMantas
+Matas Zinka         IFA-6, github_name: MatasZin
+Paulius Adamonis    IFA-6, github_name: paulius-adamonis
