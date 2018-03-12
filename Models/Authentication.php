@@ -25,8 +25,10 @@ class Authentication
         }
         $user = $this->users->getUser($email);
         if ($user != null) {
-            $this->login($user);
-            return $user->getPassword() === (string)$password;
+            if(password_verify($password, $user->getPassword())) {
+                $this->login($user);
+                return $user->getPassword() === (string)$password;
+            }
         }
         return false;
     }
