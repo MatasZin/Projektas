@@ -31,7 +31,9 @@ if(isset($_POST['logout'])){
 if (isset($_POST['login'])){
     $email = $_POST["email"];
     $password = $_POST["pass"];
-    $auth->check($email, $password);
+    if (!$auth->check($email, $password)){
+        echo "Incorrect email address or password.";
+    }
 }
 
 if($_SESSION["email"] != null){
