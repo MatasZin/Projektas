@@ -27,7 +27,7 @@ class Authentication
         if ($user != null) {
             if(password_verify($password, $user->getPassword())) {
                 $this->login($user);
-                return $user->getPassword() === (string)$password;
+                return true;
             }
         }
         return false;
