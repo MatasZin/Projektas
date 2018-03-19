@@ -7,7 +7,7 @@
  */
 
 define('DB_HOST', "localhost");
-define('DB_USERNAME', "root");
-define('DB_PASSWORD', "Mantas.123");
-define('DB_DATABASE', "login");
+define('DB_USERNAME', "username");
+define('DB_PASSWORD', "password");
+define('DB_DATABASE', "db_name");
 ?>

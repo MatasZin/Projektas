@@ -23,11 +23,12 @@ class Authentication
         if (!empty($_SESSION["email"])) {
             return true;
         }
-        $query = "SELECT email, password FROM users WHERE email = '$email'";
+        $query = "SELECT email, password, id FROM users WHERE email = '$email'";
         $result = $this->data->get_result($query);
         if ($result != null) {
             if(password_verify($password, $result['password'])) {
                 $this->login($result['email']);
+                $_SESSION["id"] = $result['id'];
                 return true;
             }
         }

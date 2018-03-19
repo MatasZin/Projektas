@@ -34,6 +34,7 @@ if (isset($_POST['login'])){
 if($_SESSION["email"] != null){
     echo "Success! You are at the university area as {$_SESSION["email"]}";
     include("logout.php");
+    include('feedback.php');
 }else{
     include("login.php");
 }
