@@ -10,19 +10,14 @@
  */
 session_start();
 
+require 'db.php';
 include "Models/Authentication.php";
-include "Models/User.php";
-include "Models/UsersContainer.php";
+//include "Models/User.php";
+//include "Models/UsersContainer.php";
 
-use Models\UsersContainer;
 use Models\Authentication;
 
-$userContainer = new UsersContainer();
-$userContainer->addUser("mantas.savickas@ktu.edu", "mantas");
-$userContainer->addUser("matas.zinka@ktu.edu", "matas");
-$userContainer->addUser("paulius.adamonis@ktu.edu","paulius");
-
-$auth = new Authentication($userContainer);
+$auth = new Authentication();
 
 if(isset($_POST['logout'])){
     $auth->logout();
