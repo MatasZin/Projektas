@@ -12,10 +12,10 @@ use Models\UsersContainer;
 
 class Authentication
 {
-    private $users;
-    public function __construct(UsersContainer $usersContainer)
+    private $data;
+    public function __construct()
     {
-        $this->users = $usersContainer;
+        $this->data = new \db();
     }
 
     public function check($email, $password)
@@ -23,10 +23,11 @@ class Authentication
         if (!empty($_SESSION["email"])) {
             return true;
         }
-        $user = $this->users->getUser($email);
-        if ($user != null) {
-            if(password_verify($password, $user->getPassword())) {
-                $this->login($user);
+        $query = "SELECT email, password FROM users WHERE email = '$email'";
+        $result = $this->data->get_result($query);
+        if ($result != null) {
+            if(password_verify($password, $result['password'])) {
+                $this->login($result['email']);
                 return true;
             }
         }
@@ -36,8 +37,8 @@ class Authentication
     {
         $_SESSION["email"] = null;
     }
-    private function login(User $member)
+    private function login($email)
     {
-        $_SESSION["email"] = $member->getEmail();
+        $_SESSION["email"] = $email;
     }
 }

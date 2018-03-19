@@ -16,9 +16,9 @@ class UsersContainer
      * @param $email User's email
      * @param $password User's password
      */
-    public function addUser($email, $password)
+    public function addUser($email, $password, $name, $secondName)
     {
-        $this->users[] = new User($email, password_hash($password, PASSWORD_DEFAULT));
+        $this->users[] = new User($email, password_hash($password, PASSWORD_DEFAULT), $name, $secondName);
     }
 
     /**
