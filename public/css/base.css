@@ -1,0 +1,43 @@
+.nav{
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #222;
+    overflow-x: hidden;
+}
+
+.content{
+    margin-left: 200px; /* Same as the width of the sidenav */
+    padding: 10px 10px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li a {
+    display: block;
+    color: #868686;
+    text-align: left;
+    padding: 20px 10px 20px 10px;
+    text-decoration: none;
+    border-bottom: #555;
+    border-top: #555;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+}
+
+li a.active {
+    background-color: orange;
+    color: white;
+}
+
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
