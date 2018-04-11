@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <div class="nav">
+            <ul>
+                {% block nav %}
+                    <li><a class="active" href="#registercar">Register a car</a></li>
+                    <li><a href="#progress">Check progress</a></li>
+                    <li><a href="#users">See list of users</a></li>
+                    <li><a href="#workers">See list of workers</a></li>
+                    <li><a href="#services">See list of services</a></li>
+                {% endblock %}
+            </ul>
+        </div>
+        <div class="content"> {% block content %}{% endblock %} </div>
+    </body>
+</html>
