@@ -7,14 +7,21 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        <div class="nav">
-            <ul>
+        <div class="header">
+            <p class="logo">Logo missing here</p>
+            <ul class="head">
+                <li class="headBtn"><a href="#login">Login</a></li>
+                <li class="headBtn"><a href="#register">Register</a></li>
+            </ul>
+        </div>
+        <div class="navigation">
+            <ul class="nav">
                 {% block nav %}
-                    <li><a class="active" href="#registercar">Register a car</a></li>
-                    <li><a href="#progress">Check progress</a></li>
-                    <li><a href="#users">See list of users</a></li>
-                    <li><a href="#workers">See list of workers</a></li>
-                    <li><a href="#services">See list of services</a></li>
+                    <li class="navBtn"><a class="active" href="#registercar">Register a car</a></li>
+                    <li class="navBtn"><a href="#progress">Check progress</a></li>
+                    <li class="navBtn"><a href="#users">See list of users</a></li>
+                    <li class="navBtn"><a href="#workers">See list of workers</a></li>
+                    <li class="navBtn"><a href="#services">See list of services</a></li>
                 {% endblock %}
             </ul>
         </div>

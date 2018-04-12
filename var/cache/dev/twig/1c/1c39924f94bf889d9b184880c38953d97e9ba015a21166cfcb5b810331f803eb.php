@@ -16,8 +16,8 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         $this->blocks = array(
             'title' => array($this, 'block_title'),
             'stylesheets' => array($this, 'block_stylesheets'),
-            'body' => array($this, 'block_body'),
-            'javascripts' => array($this, 'block_javascripts'),
+            'nav' => array($this, 'block_nav'),
+            'content' => array($this, 'block_content'),
         );
     }
 
@@ -38,20 +38,36 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         // line 5
         $this->displayBlock('title', $context, $blocks);
         echo "</title>
-        ";
+        <link rel=\"stylesheet\" href=\"";
         // line 6
-        $this->displayBlock('stylesheets', $context, $blocks);
+        echo twig_escape_filter($this->env, $this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("css/base.css"), "html", null, true);
+        echo "\">
+        ";
         // line 7
+        $this->displayBlock('stylesheets', $context, $blocks);
+        // line 8
         echo "    </head>
     <body>
-        ";
-        // line 9
-        $this->displayBlock('body', $context, $blocks);
-        // line 10
-        echo "        ";
-        $this->displayBlock('javascripts', $context, $blocks);
-        // line 11
-        echo "    </body>
+        <div class=\"header\">
+            <p class=\"logo\">Logo missing here</p>
+            <ul class=\"head\">
+                <li class=\"headBtn\"><a href=\"#login\">Login</a></li>
+                <li class=\"headBtn\"><a href=\"#register\">Register</a></li>
+            </ul>
+        </div>
+        <div class=\"navigation\">
+            <ul class=\"nav\">
+                ";
+        // line 19
+        $this->displayBlock('nav', $context, $blocks);
+        // line 26
+        echo "            </ul>
+        </div>
+        <div class=\"content\"> ";
+        // line 28
+        $this->displayBlock('content', $context, $blocks);
+        echo " </div>
+    </body>
 </html>
 ";
         
@@ -80,7 +96,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     }
 
-    // line 6
+    // line 7
     public function block_stylesheets($context, array $blocks = array())
     {
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
@@ -97,15 +113,22 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     }
 
-    // line 9
-    public function block_body($context, array $blocks = array())
+    // line 19
+    public function block_nav($context, array $blocks = array())
     {
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
-        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "nav"));
 
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "nav"));
 
+        // line 20
+        echo "                    <li class=\"navBtn\"><a class=\"active\" href=\"#registercar\">Register a car</a></li>
+                    <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
+                    <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
+                    <li class=\"navBtn\"><a href=\"#workers\">See list of workers</a></li>
+                    <li class=\"navBtn\"><a href=\"#services\">See list of services</a></li>
+                ";
         
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
 
@@ -114,14 +137,14 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     }
 
-    // line 10
-    public function block_javascripts($context, array $blocks = array())
+    // line 28
+    public function block_content($context, array $blocks = array())
     {
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
-        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "content"));
 
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "content"));
 
         
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
@@ -136,9 +159,14 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         return "base.html.twig";
     }
 
+    public function isTraitable()
+    {
+        return false;
+    }
+
     public function getDebugInfo()
     {
-        return array (  118 => 10,  101 => 9,  84 => 6,  66 => 5,  54 => 11,  51 => 10,  49 => 9,  45 => 7,  43 => 6,  39 => 5,  33 => 1,);
+        return array (  141 => 28,  126 => 20,  117 => 19,  100 => 7,  82 => 5,  68 => 28,  64 => 26,  62 => 19,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
     }
 
     public function getSourceContext()
@@ -148,13 +176,31 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
     <head>
         <meta charset=\"UTF-8\">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel=\"stylesheet\" href=\"{{ asset('css/base.css') }}\">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class=\"header\">
+            <p class=\"logo\">Logo missing here</p>
+            <ul class=\"head\">
+                <li class=\"headBtn\"><a href=\"#login\">Login</a></li>
+                <li class=\"headBtn\"><a href=\"#register\">Register</a></li>
+            </ul>
+        </div>
+        <div class=\"navigation\">
+            <ul class=\"nav\">
+                {% block nav %}
+                    <li class=\"navBtn\"><a class=\"active\" href=\"#registercar\">Register a car</a></li>
+                    <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
+                    <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
+                    <li class=\"navBtn\"><a href=\"#workers\">See list of workers</a></li>
+                    <li class=\"navBtn\"><a href=\"#services\">See list of services</a></li>
+                {% endblock %}
+            </ul>
+        </div>
+        <div class=\"content\"> {% block content %}{% endblock %} </div>
     </body>
 </html>
-", "base.html.twig", "/home/paulius/PhpstormProjects/Projektas/templates/base.html.twig");
+", "base.html.twig", "/home/paulius/Projektai/Projektas/templates/base.html.twig");
     }
 }
