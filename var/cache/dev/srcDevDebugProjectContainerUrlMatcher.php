@@ -33,6 +33,18 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'App\\Controller\\LuckyController::numberAction',  '_route' => 'app_lucky_number',);
         }
 
+        // register
+        if ('/register' === $pathinfo) {
+            $ret = array (  '_controller' => 'App\\Controller\\RegisterController::index',  '_route' => 'register',);
+            if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                $allow = array_merge($allow, array('GET', 'POST'));
+                goto not_register;
+            }
+
+            return $ret;
+        }
+        not_register:
+
         if (0 === strpos($pathinfo, '/_')) {
             // _twig_error_test
             if (0 === strpos($pathinfo, '/_error') && preg_match('#^/_error/(?P<code>\\d+)(?:\\.(?P<_format>[^/]++))?$#sD', $pathinfo, $matches)) {
