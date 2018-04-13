@@ -52,7 +52,10 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
             <p class=\"logo\">Logo missing here</p>
             <ul class=\"head\">
                 <li class=\"headBtn\"><a href=\"#login\">Login</a></li>
-                <li class=\"headBtn\"><a href=\"#register\">Register</a></li>
+                <li class=\"headBtn\"><a href=\"";
+        // line 14
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("register");
+        echo "\">Register</a></li>
             </ul>
         </div>
         <div class=\"navigation\">
@@ -166,7 +169,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     public function getDebugInfo()
     {
-        return array (  141 => 28,  126 => 20,  117 => 19,  100 => 7,  82 => 5,  68 => 28,  64 => 26,  62 => 19,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
+        return array (  144 => 28,  129 => 20,  120 => 19,  103 => 7,  85 => 5,  71 => 28,  67 => 26,  65 => 19,  57 => 14,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
     }
 
     public function getSourceContext()
@@ -184,7 +187,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
             <p class=\"logo\">Logo missing here</p>
             <ul class=\"head\">
                 <li class=\"headBtn\"><a href=\"#login\">Login</a></li>
-                <li class=\"headBtn\"><a href=\"#register\">Register</a></li>
+                <li class=\"headBtn\"><a href=\"{{ path('register') }}\">Register</a></li>
             </ul>
         </div>
         <div class=\"navigation\">
@@ -201,6 +204,6 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         <div class=\"content\"> {% block content %}{% endblock %} </div>
     </body>
 </html>
-", "base.html.twig", "/home/paulius/Projektai/Projektas/templates/base.html.twig");
+", "base.html.twig", "/var/www/html/Projektas/templates/base.html.twig");
     }
 }
