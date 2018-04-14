@@ -51,23 +51,49 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         <div class=\"header\">
             <p class=\"logo\">Logo missing here</p>
             <ul class=\"head\">
-                <li class=\"headBtn\"><a href=\"#login\">Login</a></li>
-                <li class=\"headBtn\"><a href=\"";
-        // line 14
-        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("register");
-        echo "\">Register</a></li>
-            </ul>
-        </div>
-        <div class=\"navigation\">
-            <ul class=\"nav\">
                 ";
-        // line 19
-        $this->displayBlock('nav', $context, $blocks);
-        // line 26
+        // line 13
+        if ( !twig_get_attribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new Twig_Error_Runtime('Variable "app" does not exist.', 13, $this->source); })()), "user", array())) {
+            // line 14
+            echo "                <li class=\"headBtn\"><a href=\"";
+            echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("login");
+            echo "\">Login</a></li>
+                <li class=\"headBtn\"><a href=\"";
+            // line 15
+            echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("register");
+            echo "\">Register</a></li>
+                ";
+        } elseif ((twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source,         // line 16
+(isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new Twig_Error_Runtime('Variable "app" does not exist.', 16, $this->source); })()), "user", array()), "username", array()) != null)) {
+            // line 17
+            echo "                    <li class=\"headBtn\"><a href=\"";
+            echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("logout");
+            echo "\">Logout</a></li>
+                    <li class=\"headBtn\"><a>Logged as ";
+            // line 18
+            echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, twig_get_attribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new Twig_Error_Runtime('Variable "app" does not exist.', 18, $this->source); })()), "user", array()), "username", array()), "html", null, true);
+            echo "</a></li>
+                ";
+        }
+        // line 20
         echo "            </ul>
         </div>
-        <div class=\"content\"> ";
-        // line 28
+        ";
+        // line 22
+        if (twig_get_attribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new Twig_Error_Runtime('Variable "app" does not exist.', 22, $this->source); })()), "user", array())) {
+            // line 23
+            echo "        <div class=\"navigation\">
+            <ul class=\"nav\">
+                ";
+            // line 25
+            $this->displayBlock('nav', $context, $blocks);
+            // line 32
+            echo "            </ul>
+        </div>
+        ";
+        }
+        // line 35
+        echo "        <div class=\"content\"> ";
         $this->displayBlock('content', $context, $blocks);
         echo " </div>
     </body>
@@ -116,7 +142,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     }
 
-    // line 19
+    // line 25
     public function block_nav($context, array $blocks = array())
     {
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
@@ -125,7 +151,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "nav"));
 
-        // line 20
+        // line 26
         echo "                    <li class=\"navBtn\"><a class=\"active\" href=\"#registercar\">Register a car</a></li>
                     <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
                     <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
@@ -140,7 +166,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     }
 
-    // line 28
+    // line 35
     public function block_content($context, array $blocks = array())
     {
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
@@ -169,7 +195,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     public function getDebugInfo()
     {
-        return array (  144 => 28,  129 => 20,  120 => 19,  103 => 7,  85 => 5,  71 => 28,  67 => 26,  65 => 19,  57 => 14,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
+        return array (  170 => 35,  155 => 26,  146 => 25,  129 => 7,  111 => 5,  96 => 35,  91 => 32,  89 => 25,  85 => 23,  83 => 22,  79 => 20,  74 => 18,  69 => 17,  67 => 16,  63 => 15,  58 => 14,  56 => 13,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
     }
 
     public function getSourceContext()
@@ -186,10 +212,16 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         <div class=\"header\">
             <p class=\"logo\">Logo missing here</p>
             <ul class=\"head\">
-                <li class=\"headBtn\"><a href=\"#login\">Login</a></li>
+                {% if not app.user %}
+                <li class=\"headBtn\"><a href=\"{{ path('login') }}\">Login</a></li>
                 <li class=\"headBtn\"><a href=\"{{ path('register') }}\">Register</a></li>
+                {% elseif app.user.username != null %}
+                    <li class=\"headBtn\"><a href=\"{{ path('logout') }}\">Logout</a></li>
+                    <li class=\"headBtn\"><a>Logged as {{ app.user.username }}</a></li>
+                {% endif %}
             </ul>
         </div>
+        {% if app.user %}
         <div class=\"navigation\">
             <ul class=\"nav\">
                 {% block nav %}
@@ -201,6 +233,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
                 {% endblock %}
             </ul>
         </div>
+        {% endif %}
         <div class=\"content\"> {% block content %}{% endblock %} </div>
     </body>
 </html>

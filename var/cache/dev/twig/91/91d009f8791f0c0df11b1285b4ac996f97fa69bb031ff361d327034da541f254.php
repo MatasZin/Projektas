@@ -83,6 +83,6 @@ class __TwigTemplate_cc6f5c7bf5f805366a3388745237a34429fc354f169042fabf4a6dd763d
         </div>
     </div>
 </div>
-", "@WebProfiler/Profiler/header.html.twig", "/home/paulius/PhpstormProjects/Projektas/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/header.html.twig");
+", "@WebProfiler/Profiler/header.html.twig", "/var/www/html/Projektas/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/header.html.twig");
     }
 }

@@ -2214,6 +2214,6 @@ table.logs .metadata {
         margin-left: 2px;
     }
 }
-", "@WebProfiler/Profiler/profiler.css.twig", "/home/paulius/PhpstormProjects/Projektas/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/profiler.css.twig");
+", "@WebProfiler/Profiler/profiler.css.twig", "/var/www/html/Projektas/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/profiler.css.twig");
     }
 }

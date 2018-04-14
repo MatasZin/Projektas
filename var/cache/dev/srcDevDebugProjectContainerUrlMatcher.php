@@ -28,9 +28,29 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             $canonicalMethod = 'GET';
         }
 
-        // app_lucky_number
-        if ('/lucky/number' === $pathinfo) {
-            return array (  '_controller' => 'App\\Controller\\LuckyController::numberAction',  '_route' => 'app_lucky_number',);
+        if (0 === strpos($pathinfo, '/l')) {
+            // app_lucky_number
+            if ('/lucky/number' === $pathinfo) {
+                return array (  '_controller' => 'App\\Controller\\LuckyController::numberAction',  '_route' => 'app_lucky_number',);
+            }
+
+            // login
+            if ('/login' === $pathinfo) {
+                $ret = array (  '_controller' => 'App\\Controller\\SecurityController::loginAction',  '_route' => 'login',);
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_login;
+                }
+
+                return $ret;
+            }
+            not_login:
+
+            // logout
+            if ('/logout' === $pathinfo) {
+                return array (  '_controller' => 'App\\Controller\\SecurityController::logoutAction',  '_route' => 'logout',);
+            }
+
         }
 
         // register
@@ -44,6 +64,21 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return $ret;
         }
         not_register:
+
+        // homepage
+        if ('' === $trimmedPathinfo) {
+            $ret = array (  '_controller' => 'App\\Controller\\SuppController::indexAction',  '_route' => 'homepage',);
+            if ('/' === substr($pathinfo, -1)) {
+                // no-op
+            } elseif ('GET' !== $canonicalMethod) {
+                goto not_homepage;
+            } else {
+                return array_replace($ret, $this->redirect($rawPathinfo.'/', 'homepage'));
+            }
+
+            return $ret;
+        }
+        not_homepage:
 
         if (0 === strpos($pathinfo, '/_')) {
             // _twig_error_test

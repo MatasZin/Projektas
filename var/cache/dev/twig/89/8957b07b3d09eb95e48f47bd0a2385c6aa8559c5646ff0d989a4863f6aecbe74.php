@@ -61,6 +61,6 @@ class __TwigTemplate_983dd90f4c3d336b216903a345f3507047ce253860d97fc281c292aac1c
         S16.01,0.357,11.61,0.357z M17.07,8.337c0,3.011-2.449,5.46-5.46,5.46c-3.011,0-5.46-2.449-5.46-5.46s2.449-5.46,5.46-5.46
         C14.62,2.877,17.07,5.326,17.07,8.337z\"/>
 </svg>
-", "@WebProfiler/Icon/search.svg", "/home/paulius/PhpstormProjects/Projektas/vendor/symfony/web-profiler-bundle/Resources/views/Icon/search.svg");
+", "@WebProfiler/Icon/search.svg", "/var/www/html/Projektas/vendor/symfony/web-profiler-bundle/Resources/views/Icon/search.svg");
     }
 }

@@ -2,6 +2,6 @@
 
 {% block content %}
     {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_widget(form, { 'attr': { 'class' : 'form-centered' } }) }}
     {{ form_end(form) }}
 {% endblock %}

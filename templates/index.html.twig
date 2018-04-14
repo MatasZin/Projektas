@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {% if app.user %}
+    <h1>Welcome {{ app.user.username }}</h1>
+
+        {% if isRoleAdmin == 1 %}
+            <h1>You are logged as Admin</h1>
+            <a href="{{ path('logout') }}" class="modern">Logout</a>
+        {% elseif isRoleWorker == 1 %}
+            <h1>You are logged as Worker</h1>
+            <a href="{{ path('logout') }}" class="modern">Logout</a>
+        {% elseif isRoleUser == 1 %}
+            <h1>You are logged as User</h1>
+            <a href="{{ path('logout') }}" class="modern">Logout</a>
+        {% endif %}
+
+    {% endif %}
+{% endblock %}
