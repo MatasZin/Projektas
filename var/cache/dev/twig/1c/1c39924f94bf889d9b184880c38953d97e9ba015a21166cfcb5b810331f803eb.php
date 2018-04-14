@@ -130,7 +130,10 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
                     <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
                     <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
                     <li class=\"navBtn\"><a href=\"#workers\">See list of workers</a></li>
-                    <li class=\"navBtn\"><a href=\"#services\">See list of services</a></li>
+                    <li class=\"navBtn\"><a href=\"";
+        // line 24
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("Services");
+        echo "\">See list of services</a></li>
                 ";
         
         $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
@@ -169,7 +172,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     public function getDebugInfo()
     {
-        return array (  144 => 28,  129 => 20,  120 => 19,  103 => 7,  85 => 5,  71 => 28,  67 => 26,  65 => 19,  57 => 14,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
+        return array (  147 => 28,  135 => 24,  129 => 20,  120 => 19,  103 => 7,  85 => 5,  71 => 28,  67 => 26,  65 => 19,  57 => 14,  49 => 8,  47 => 7,  43 => 6,  39 => 5,  33 => 1,);
     }
 
     public function getSourceContext()
@@ -197,13 +200,13 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
                     <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
                     <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
                     <li class=\"navBtn\"><a href=\"#workers\">See list of workers</a></li>
-                    <li class=\"navBtn\"><a href=\"#services\">See list of services</a></li>
+                    <li class=\"navBtn\"><a href=\"{{ path('Services') }}\">See list of services</a></li>
                 {% endblock %}
             </ul>
         </div>
         <div class=\"content\"> {% block content %}{% endblock %} </div>
     </body>
 </html>
-", "base.html.twig", "/var/www/html/Projektas/templates/base.html.twig");
+", "base.html.twig", "/home/matas/Desktop/Projektelis/Projektas/templates/base.html.twig");
     }
 }

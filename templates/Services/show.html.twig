@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    <h1>{{ service.title }}</h1>
+    <p>{{ service.description }}</p>
+    <hr>
+    <a href="{{ path('Services') }}">Go Back</a>
+{% endblock %}
