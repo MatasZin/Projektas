@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Services;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,8 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ServiceController extends Controller {
     /**
@@ -35,10 +33,10 @@ class ServiceController extends Controller {
         $form = $this->createFormBuilder($service)
             ->add('title', TextType::class, array(
                 'attr'=>array('class' => 'simple-input')))
-            ->add('price', TextType::class, array(
+            ->add('price', NumberType::class, array(
                 'required' => false,
                 'attr'=>array('class' => 'simple-input')))
-            ->add('description', TextType::class,array(
+            ->add('description', TextareaType::class,array(
                 'required' => false,
                 'attr' =>array('class' => 'simple-input')))
             ->add('save', SubmitType::class, array(
@@ -69,7 +67,7 @@ class ServiceController extends Controller {
         $form = $this->createFormBuilder($service)
             ->add('title', TextType::class, array(
                 'attr'=>array('class' => 'simple-input')))
-            ->add('price', TextType::class, array(
+            ->add('price', NumberType::class, array(
                 'required' => false,
                 'attr'=>array('class' => 'simple-input')))
             ->add('description', TextType::class,array(
@@ -82,13 +80,24 @@ class ServiceController extends Controller {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager = $this->getDoctrine()->getManager();
-            //$entityManager->persist($service);
             $entityManager->flush();
             return $this->redirectToRoute('Services');
         }
 
         return $this->render('Services/edit.html.twig', array(
             'form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/Services/remove{id}", name="remove_service")
+     * @Method({"GET"})
+     */
+    public function remove($id) {
+        $service = $this->getDoctrine()->getRepository(Services::class)->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($service);
+        $entityManager->flush();
+        return $this->index();
     }
 
     /**
@@ -99,30 +108,4 @@ class ServiceController extends Controller {
         $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
         return $this->render('Services/show.html.twig', array ('service' => $service));
     }
-
-    /**
-     * @Route("/Services/remove/{id}", name="remove_service")
-     * @Method({"DELETE"})
-     */
-    public function remove($id) {
-        $service = $this->getDoctrine()->getRepository(Services::class)->find($id);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($service);
-        $entityManager->flush();
-        return $this->redirectToRoute('Services');
-    }
-
-   // /**
-   //  * @Route("/Services/save")
-   //  */
-   // public  function save(){
-   //     $entityManager = $this->getDoctrine()->getManager();
-   //     $service = new Services();
-   //     $service->setTitle('service one');
-   //     $service->setPrice(111);
-   //     $service->setDescription('');
-   //     $entityManager->persist($service);
-   //     $entityManager->flush();
-   //     return new Response('saved service with the id of'.$service->getId());
-   // }
 }

@@ -150,7 +150,10 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
         echo "                    <li class=\"navBtn\"><a class=\"active\" href=\"#registercar\">Register a car</a></li>
                     <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
                     <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
-                    <li class=\"navBtn\"><a href=\"#workers\">See list of workers</a></li>
+                    <li class=\"navBtn\"><a href=\"";
+        // line 24
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("workers");
+        echo "\">See list of workers</a></li>
                     <li class=\"navBtn\"><a href=\"";
         // line 25
         echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("Services");
@@ -193,7 +196,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
 
     public function getDebugInfo()
     {
-        return array (  168 => 29,  156 => 25,  150 => 21,  141 => 20,  124 => 8,  107 => 7,  89 => 5,  75 => 29,  71 => 27,  69 => 20,  61 => 15,  53 => 9,  50 => 8,  48 => 7,  44 => 6,  40 => 5,  34 => 1,);
+        return array (  171 => 29,  159 => 25,  155 => 24,  150 => 21,  141 => 20,  124 => 8,  107 => 7,  89 => 5,  75 => 29,  71 => 27,  69 => 20,  61 => 15,  53 => 9,  50 => 8,  48 => 7,  44 => 6,  40 => 5,  34 => 1,);
     }
 
     public function getSourceContext()
@@ -221,7 +224,7 @@ class __TwigTemplate_ea0950a52672e56a2fb0f55cc3724277523febeaec61f1eb7454284910a
                     <li class=\"navBtn\"><a class=\"active\" href=\"#registercar\">Register a car</a></li>
                     <li class=\"navBtn\"><a href=\"#progress\">Check progress</a></li>
                     <li class=\"navBtn\"><a href=\"#users\">See list of users</a></li>
-                    <li class=\"navBtn\"><a href=\"#workers\">See list of workers</a></li>
+                    <li class=\"navBtn\"><a href=\"{{ path('workers') }}\">See list of workers</a></li>
                     <li class=\"navBtn\"><a href=\"{{ path('Services') }}\">See list of services</a></li>
                 {% endblock %}
             </ul>

@@ -68,22 +68,54 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'edit_service')), array (  '_controller' => 'App\\Controller\\ServiceController::edit',));
             }
 
-            // service_show
-            if (preg_match('#^/Services/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'service_show')), array (  '_controller' => 'App\\Controller\\ServiceController::show',));
-            }
-
             // remove_service
-            if (0 === strpos($pathinfo, '/Services/remove') && preg_match('#^/Services/remove/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
+            if (0 === strpos($pathinfo, '/Services/remove') && preg_match('#^/Services/remove(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
                 $ret = $this->mergeDefaults(array_replace($matches, array('_route' => 'remove_service')), array (  '_controller' => 'App\\Controller\\ServiceController::remove',));
-                if (!in_array($requestMethod, array('DELETE'))) {
-                    $allow = array_merge($allow, array('DELETE'));
+                if (!in_array($canonicalMethod, array('GET'))) {
+                    $allow = array_merge($allow, array('GET'));
                     goto not_remove_service;
                 }
 
                 return $ret;
             }
             not_remove_service:
+
+            // service_show
+            if (preg_match('#^/Services/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'service_show')), array (  '_controller' => 'App\\Controller\\ServiceController::show',));
+            }
+
+        }
+
+        elseif (0 === strpos($pathinfo, '/workers')) {
+            // workers
+            if ('/workers' === $pathinfo) {
+                return array (  '_controller' => 'App\\Controller\\WorkersController::index',  '_route' => 'workers',);
+            }
+
+            // add_worker
+            if ('/workers/add' === $pathinfo) {
+                $ret = array (  '_controller' => 'App\\Controller\\WorkersController::add',  '_route' => 'add_worker',);
+                if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                    $allow = array_merge($allow, array('GET', 'POST'));
+                    goto not_add_worker;
+                }
+
+                return $ret;
+            }
+            not_add_worker:
+
+            // app_workers_remove
+            if (0 === strpos($pathinfo, '/workers/remove') && preg_match('#^/workers/remove(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
+                $ret = $this->mergeDefaults(array_replace($matches, array('_route' => 'app_workers_remove')), array (  '_controller' => 'App\\Controller\\WorkersController::remove',));
+                if (!in_array($canonicalMethod, array('GET'))) {
+                    $allow = array_merge($allow, array('GET'));
+                    goto not_app_workers_remove;
+                }
+
+                return $ret;
+            }
+            not_app_workers_remove:
 
         }
 

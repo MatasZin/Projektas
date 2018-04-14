@@ -3,10 +3,10 @@
     {% if services %}
         <table>
             <thead>
-                <tr>
-                    <th>Service</th>
-                    <th>Price</th>
-                </tr>
+            <tr>
+                <th>Service</th>
+                <th>Price</th>
+            </tr>
             </thead>
             <tbody>
             {% for service in services %}
@@ -16,17 +16,24 @@
                     <td>
                         <a href="{{ path('Services') }}/{{ service.id }}"
                            class = modern>Details</a>
-                        <a href="Services/edit/{{ service.id }}"
+                        <a href="{{ path('Services') }}/edit/{{ service.id }}"
                            class = modern>Edit</a>
-                        <a href="#" data-id="{{ service.id }}"
-                           class=danger>Remove</a>
+                        <a class="danger" href="/Services/remove{{ service.id }}" >Remove</a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <a href="{{ path('new_service') }}" class = modern>Create new service</a>
     {% else %}
         <p>No Services</p>
     {% endif %}
+    <a href="{{ path('new_service') }}" class = modern>Create new service</a>
+{% endblock %}
+
+{% block nav %}
+    <li class="navBtn"><a href="#registercar">Register a car</a></li>
+    <li class="navBtn"><a href="#progress">Check progress</a></li>
+    <li class="navBtn"><a href="#users">See list of users</a></li>
+    <li class="navBtn"><a href="{{ path('workers') }}">See list of workers</a></li>
+    <li class="navBtn"><a class="active" href="{{ path('Services') }}">See list of services</a></li>
 {% endblock %}
