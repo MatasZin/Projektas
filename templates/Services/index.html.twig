@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    {% if services %}
+        <table>
+            <thead>
+            <tr>
+                <th>Service</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for service in services %}
+                <tr>
+                    <td>{{ service.title }}</td>
+                    <td>{{ service.price }} €</td>
+                    <td><a href="{{ path('Services') }}/{{ service.id }}" >Details</a> </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No Services</p>
+    {% endif %}
+{% endblock %}
