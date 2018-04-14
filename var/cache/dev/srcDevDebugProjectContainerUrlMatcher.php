@@ -58,6 +58,11 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             }
             not_Services:
 
+            // new_service
+            if ('/Services/new' === $pathinfo) {
+                return array (  '_controller' => 'App\\Controller\\ServiceController::new',  '_route' => 'new_service',);
+            }
+
             // article_show
             if (preg_match('#^/Services/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'article_show')), array (  '_controller' => 'App\\Controller\\ServiceController::show',));
