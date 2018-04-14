@@ -45,6 +45,18 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         }
         not_register:
 
+        // Services
+        if ('/Services' === $pathinfo) {
+            $ret = array (  '_controller' => 'App\\Controller\\ServiceController::index',  '_route' => 'Services',);
+            if (!in_array($canonicalMethod, array('GET', 'POST'))) {
+                $allow = array_merge($allow, array('GET', 'POST'));
+                goto not_Services;
+            }
+
+            return $ret;
+        }
+        not_Services:
+
         if (0 === strpos($pathinfo, '/_')) {
             // _twig_error_test
             if (0 === strpos($pathinfo, '/_error') && preg_match('#^/_error/(?P<code>\\d+)(?:\\.(?P<_format>[^/]++))?$#sD', $pathinfo, $matches)) {

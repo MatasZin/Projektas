@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    {% if services %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for service in services %}
+                <tr>
+                    <td>{{ service }}</td>
+                    <td>price</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No Services</p>
+    {% endif %}
+{% endblock %}
