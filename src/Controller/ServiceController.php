@@ -59,12 +59,57 @@ class ServiceController extends Controller {
     }
 
     /**
-     * @Route("/Services/{id}", name="article_show")
+     * @Route("/Services/edit/{id}", name="edit_service")
+     * Method({"GET", "POST"})
+     */
+    public function edit(Request $request, $id){
+        $service = new Services();
+        $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
+
+        $form = $this->createFormBuilder($service)
+            ->add('title', TextType::class, array(
+                'attr'=>array('class' => 'simple-input')))
+            ->add('price', TextType::class, array(
+                'required' => false,
+                'attr'=>array('class' => 'simple-input')))
+            ->add('description', TextType::class,array(
+                'required' => false,
+                'attr' =>array('class' => 'simple-input')))
+            ->add('save', SubmitType::class, array(
+                'label' => 'Confirm',
+                'attr' => array('class' => 'modern')))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()){
+            $entityManager = $this->getDoctrine()->getManager();
+            //$entityManager->persist($service);
+            $entityManager->flush();
+            return $this->redirectToRoute('Services');
+        }
+
+        return $this->render('Services/edit.html.twig', array(
+            'form' => $form->createView()));
+    }
+
+    /**
+     * @Route("/Services/{id}", name="service_show")
      */
     public function show($id)
     {
         $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
         return $this->render('Services/show.html.twig', array ('service' => $service));
+    }
+
+    /**
+     * @Route("/Services/remove/{id}", name="remove_service")
+     * @Method({"DELETE"})
+     */
+    public function remove($id) {
+        $service = $this->getDoctrine()->getRepository(Services::class)->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($service);
+        $entityManager->flush();
+        return $this->redirectToRoute('Services');
     }
 
    // /**

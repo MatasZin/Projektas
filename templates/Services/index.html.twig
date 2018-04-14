@@ -13,16 +13,19 @@
                 <tr>
                     <td>{{ service.title }}</td>
                     <td>{{ service.price }} €</td>
-                    <td><a href="{{ path('Services') }}/{{ service.id }}" class = modern>Details</a> </td>
+                    <td>
+                        <a href="{{ path('Services') }}/{{ service.id }}"
+                           class = modern>Details</a>
+                        <a href="Services/edit/{{ service.id }}"
+                           class = modern>Edit</a>
+                        <a href="#" data-id="{{ service.id }}"
+                           class=danger>Remove</a>
+                    </td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td>
-                    <a href="{{ path('new_service') }}" class = modern>Create new service</a>
-                </td>
-            </tr>
             </tbody>
         </table>
+        <a href="{{ path('new_service') }}" class = modern>Create new service</a>
     {% else %}
         <p>No Services</p>
     {% endif %}

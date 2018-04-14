@@ -63,10 +63,27 @@ class srcDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return array (  '_controller' => 'App\\Controller\\ServiceController::new',  '_route' => 'new_service',);
             }
 
-            // article_show
-            if (preg_match('#^/Services/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'article_show')), array (  '_controller' => 'App\\Controller\\ServiceController::show',));
+            // edit_service
+            if (0 === strpos($pathinfo, '/Services/edit') && preg_match('#^/Services/edit/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'edit_service')), array (  '_controller' => 'App\\Controller\\ServiceController::edit',));
             }
+
+            // service_show
+            if (preg_match('#^/Services/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'service_show')), array (  '_controller' => 'App\\Controller\\ServiceController::show',));
+            }
+
+            // remove_service
+            if (0 === strpos($pathinfo, '/Services/remove') && preg_match('#^/Services/remove/(?P<id>[^/]++)$#sD', $pathinfo, $matches)) {
+                $ret = $this->mergeDefaults(array_replace($matches, array('_route' => 'remove_service')), array (  '_controller' => 'App\\Controller\\ServiceController::remove',));
+                if (!in_array($requestMethod, array('DELETE'))) {
+                    $allow = array_merge($allow, array('DELETE'));
+                    goto not_remove_service;
+                }
+
+                return $ret;
+            }
+            not_remove_service:
 
         }
 
