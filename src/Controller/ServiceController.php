@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Entity\Services;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +21,30 @@ class ServiceController extends Controller {
      */
     public function index()
     {
-        $services =['service 1 ', 'service 2'];
+        $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
         return $this->render('Services/index.html.twig', array ('services' =>$services));
     }
+
+    /**
+     * @Route("/Services/{id}", name="article_show")
+     */
+    public function show($id)
+    {
+        $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
+        return $this->render('Services/show.html.twig', array ('service' => $service));
+    }
+
+   // /**
+   //  * @Route("/Services/save")
+   //  */
+   // public  function save(){
+   //     $entityManager = $this->getDoctrine()->getManager();
+   //     $service = new Services();
+   //     $service->setTitle('service one');
+   //     $service->setPrice(111);
+   //     $service->setDescription('');
+   //     $entityManager->persist($service);
+   //     $entityManager->flush();
+   //     return new Response('saved service with the id of'.$service->getId());
+   // }
 }
