@@ -65,7 +65,7 @@ class WorkersController extends Controller {
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()){
                 $user = $form->getData();
-                $user->setAccess('1');
+                $user->setRole('ROLE_WORKER');
                 $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
 
                 $entityManager = $this->getDoctrine()->getManager();
