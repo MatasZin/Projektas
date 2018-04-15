@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {% if workers %}
+        <h1>List of workers:</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+            </tr>
+            {% for worker in workers %}
+                <tr>
+                    <td>{{ worker.name }}</td>
+                    <td>{{ worker.SecondName }}</td>
+                    <td>{{ worker.email }}</td>
+                    <td><a class="danger" href="/workers/remove{{ worker.id }}" >Remove</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+    {% else %}
+        <h1>There are no workers to display!</h1>
+    {% endif %}
+    <a class="modern" href="{{ path('add_worker') }}" >Add a new worker</a>
+{% endblock %}
+
+{% block nav %}
+    <li class="navBtn"><a href="#registercar">Register a car</a></li>
+    <li class="navBtn"><a href="#progress">Check progress</a></li>
+    <li class="navBtn"><a href="#users">See list of users</a></li>
+    <li class="navBtn"><a class="active" href="{{ path('workers') }}">See list of workers</a></li>
+    <li class="navBtn"><a href="{{ path('Services') }}">See list of services</a></li>
+{% endblock %}
