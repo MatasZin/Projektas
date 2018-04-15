@@ -26,8 +26,12 @@ class RegisterController extends Controller
      */
     public function index(Request $request, UserPasswordEncoderInterface $encoder)
     {
-        $user = new User();
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            return $this->redirect($this->generateUrl('homepage'));
+        }
 
+        $user = new User();
         $form = $this->createFormBuilder($user)
             ->add('email', EmailType::class, array(
                 'attr' => array('class' => 'simple-input')
