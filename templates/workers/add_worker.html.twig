@@ -5,3 +5,11 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}
+
+{% block nav %}
+    <li class="navBtn"><a href="#registercar">Register a car</a></li>
+    <li class="navBtn"><a href="#progress">Check progress</a></li>
+    <li class="navBtn"><a href="#users">See list of users</a></li>
+    <li class="navBtn"><a class="active" href="{{ path('workers') }}">See list of workers</a></li>
+    <li class="navBtn"><a href="{{ path('Services') }}">See list of services</a></li>
+{% endblock %}
