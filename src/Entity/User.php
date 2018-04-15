@@ -8,11 +8,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- *
+ * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"id", "email"})
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -33,21 +33,30 @@ class User
     private $password;
 
     /**
-     * @ORM\Column(name="name", type="string", length=25)
+     * @ORM\Column(name="name", type="string", length=25, nullable=true)
      */
     private $name;
 
     /**
-     * @ORM\Column(name="second_name", type="string", length=25)
+     * @ORM\Column(name="second_name", type="string", length=25, nullable=true)
      */
     private $second_name;
 
     /**
-     * @ORM\Column(type="integer", length=1, options={"default" : 0})
-     * @Assert\Type(type = "numeric")
-     *
+     * @ORM\Column(name="is_active", type="boolean")
      */
-    private $access;
+    private $isActive;
+
+    public function __construct()
+    {
+        $this->isActive = true;
+        // may not be needed, see section on salt below
+        // $this->salt = md5(uniqid('', true));
+    }
+    /**
+     * @ORM\Column(name="role", type="string", length=25)
+     */
+    private $role;
 
     public function getId(){
         return $this->id;
@@ -84,11 +93,77 @@ class User
     public function setSecondName($second_name){
         $this->second_name = $second_name;
     }
-    public function getAccess(){
-        return $this->access;
+
+    public function setRole($role){
+        $this->role = $role;
     }
 
-    public function setAccess($access){
-        $this->access = $access;
+    public function getRole(){
+        return $this->role;
     }
+
+    public function getRoles()
+    {
+        return [$this->getRole()];
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->isActive,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->isActive,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
+    }
+
 }

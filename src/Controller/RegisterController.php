@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class RegisterController extends Controller
@@ -23,7 +24,7 @@ class RegisterController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
 
@@ -55,13 +56,16 @@ class RegisterController extends Controller
         //var_dump($form);
         if ($form->isSubmitted() && $form->isValid()){
             $user = $form->getData();
-            $user->setAccess('0');
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_DEFAULT));
+
+            $password = $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
+
+            $user->setRole('ROLE_USER');
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('register');
+            return $this->redirectToRoute('homepage');
         }
 
 
