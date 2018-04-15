@@ -24,11 +24,12 @@
         <div class="navigation">
             <ul class="nav">
                 {% block nav %}
-                    <li class="navBtn"><a class="active" href="#registercar">Register a car</a></li>
-                    <li class="navBtn"><a href="#progress">Check progress</a></li>
-                    <li class="navBtn"><a href="#users">See list of users</a></li>
-                    <li class="navBtn"><a href="{{ path('workers') }}">See list of workers</a></li>
-                    <li class="navBtn"><a href="{{ path('Services') }}">See list of services</a></li>
+                    {% set route = app.request.get('_route')|lower %}
+                    <li class="navBtn"><a class="{{ 'homepage' in route ? 'active' }}" href="#registercar">Register a car</a></li>
+                    <li class="navBtn"><a class="{{ 'progress' in route ? 'active' }}" href="#progress">Check progress</a></li>
+                    <li class="navBtn"><a class="{{ 'user' in route ? 'active' }}" href="#users">See list of users</a></li>
+                    <li class="navBtn"><a class="{{ 'worker' in route ? 'active' }}" href="{{ path('workers') }}">See list of workers</a></li>
+                    <li class="navBtn"><a class="{{ 'service' in route ? 'active' }}" href="{{ path('Services') }}">See list of services</a></li>
                 {% endblock %}
             </ul>
         </div>

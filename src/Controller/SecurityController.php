@@ -18,8 +18,12 @@ class SecurityController extends Controller
      * @Route("/login", name="login")
      * @Method({"GET", "POST"})
      */
-    public function loginAction(AuthenticationUtils $authenticationUtils){
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils){
 
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        {
+            return $this->redirect($this->generateUrl('homepage'));
+        }
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
