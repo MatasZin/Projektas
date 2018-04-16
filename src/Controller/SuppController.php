@@ -15,17 +15,9 @@ class SuppController extends Controller
      */
     public function indexAction()
     {
-        if($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
-        {
-            return $this->redirectToRoute('workers');
-        }
-        else if($this->get('security.authorization_checker')->isGranted('ROLE_USER'))
-        {
-            return $this->redirectToRoute('Services');
-        }
         $auth_checker = $this->get('security.authorization_checker');
-        $isRoleAdmin = $auth_checker->isGranted('ROLE_ADMIN');
         $isRoleWorker = $auth_checker->isGranted('ROLE_WORKER');
+        $isRoleAdmin = $auth_checker->isGranted('ROLE_ADMIN');
         $isRoleUser = $auth_checker->isGranted('ROLE_USER');
         return $this->render('index.html.twig', [
             'isRoleAdmin' => $isRoleAdmin,
