@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"id", "email"})
+ * @UniqueEntity(fields={"id", "email"}, message="This email is already taken.")
  */
 class User implements UserInterface, \Serializable
 {
@@ -47,11 +48,21 @@ class User implements UserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Car", mappedBy="user")
+     */
+    private $cars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="user")
+     */
+    private $assignedServices;
+
     public function __construct()
     {
         $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
+        $this->cars = new ArrayCollection();
+        $this->assignedServices = new ArrayCollection();
     }
     /**
      * @ORM\Column(name="role", type="string", length=25)
@@ -149,8 +160,6 @@ class User implements UserInterface, \Serializable
             $this->email,
             $this->password,
             $this->isActive,
-            // see section on salt below
-            // $this->salt,
         ));
     }
 
@@ -161,8 +170,6 @@ class User implements UserInterface, \Serializable
             $this->email,
             $this->password,
             $this->isActive,
-            // see section on salt below
-            // $this->salt
             ) = unserialize($serialized);
     }
 
