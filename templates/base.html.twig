@@ -35,8 +35,8 @@
                     {% endif %}
                     {% if is_granted("ROLE_ADMIN") %}
                     <li class="navBtn"><a class="{{ 'worker' in route ? 'active' }}" href="{{ path('workers') }}">See list of workers</a></li>
-                    <li class="navBtn"><a class="{{ 'service' in route ? 'active' }}" href="{{ path('Services') }}">See list of services</a></li>
                     {% endif %}
+                    <li class="navBtn"><a class="{{ 'service' in route ? 'active' }}" href="{{ path('Services') }}">See list of services</a></li>
                 {% endblock %}
             </ul>
         </div>
