@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ServicesRepository")
+ * @ORM\Table(name="services")
  */
 class Services
 {
@@ -33,6 +35,16 @@ class Services
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="services")
+     */
+    private $assignedOrders;
+
+    public function __construct()
+    {
+        $this->assignedOrders = new ArrayCollection();
+    }
 
     // Getteres & Setters
 
