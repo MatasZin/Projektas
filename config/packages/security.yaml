@@ -53,4 +53,4 @@ security:
          - { path: ^/Services/new, roles: ROLE_ADMIN }
          - { path: ^/Services/edit, roles: ROLE_ADMIN }
          - { path: ^/Services/remove, roles: ROLE_ADMIN }
-         - { path: ^/$, role: IS_AUTHENTICATED_FULLY }
+         - { path: ^/, role: IS_AUTHENTICATED_FULLY }
