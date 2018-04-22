@@ -34,21 +34,23 @@ class RegisterController extends Controller
         $user = new User();
         $form = $this->createFormBuilder($user)
             ->add('email', EmailType::class, array(
-                'attr' => array('class' => 'simple-input')
+                'attr' => array('class' => 'simple-input'),
+                'label' => 'Email *',
             ))
             ->add('name', TextType::class, array(
-                'required' => false,
-                'attr' => array('class' => 'simple-input')
+                'attr' => array('class' => 'simple-input'),
+                'label' => 'First name *',
             ))
             ->add('second_name', TextType::class, array(
                 'required' => false,
-                'attr' => array('class' => 'simple-input')
+                'attr' => array('class' => 'simple-input'),
+                'label' => 'Second name',
             ))
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'options' => array('attr' => array('class' => 'simple-input')),
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
+                'first_options'  => array('label' => 'Password *'),
+                'second_options' => array('label' => 'Repeat Password *'),
             ))
             ->add('register', SubmitType::class, array(
                 'label' => 'Register',

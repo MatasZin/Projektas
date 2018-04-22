@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
+use App\Form\OrderType;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraint as Assert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderedServiceRepository")
@@ -41,7 +42,7 @@ class OrderedService
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ordered_services")
-     * @ORM\JoinColumn(name="worker_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="worker_id", referencedColumnName="id", nullable=true)
      */
     private $worker;
 
@@ -64,9 +65,9 @@ class OrderedService
     {
         return $this->lastChangeDate;
     }
-    public function setLastChangeDate($lastChangeDate)
+    public function setLastChangeDate()
     {
-        $this->lastChangeDate = $lastChangeDate;
+        $this->lastChangeDate = new \DateTime();
     }
 
     public function getNote()
@@ -78,7 +79,7 @@ class OrderedService
         $this->note = $note;
     }
 
-    public function setOrder($order)
+    public function setOrder(Order $order)
     {
         $this->order = $order;
     }
@@ -87,7 +88,7 @@ class OrderedService
         return $this->order;
     }
 
-    public function setWorker($worker)
+    public function setWorker(User $worker = null)
     {
         $this->worker = $worker;
     }
@@ -96,9 +97,9 @@ class OrderedService
         return $this->worker;
     }
 
-    public function setService($service)
+    public function setService(Services $services)
     {
-        $this->service = $service;
+        $this->service = $services;
     }
     public function getService()
     {

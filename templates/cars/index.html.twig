@@ -1,7 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    Mano automobiliai:
+    {% for car in cars %}
+        <p>Valstybiniai numeriai: {{ car.licensePlate }}</p>
+    {% endfor %}
     {{ form_start(form) }}
+    {{ form_errors(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
 {% endblock %}

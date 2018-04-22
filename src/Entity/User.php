@@ -34,12 +34,20 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(name="name", type="string", length=25, nullable=true)
+     * @ORM\Column(name="name", type="string", length=25, nullable=false)
+     * @Assert\Regex(
+     *     "/^[a-Z]+$/",
+     *     message="Incorrect format of first name."
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(name="second_name", type="string", length=25, nullable=true)
+     * @Assert\Regex(
+     *     "/^[a-Z]+$/",
+     *     message="Incorrect format of second name."
+     * )
      */
     private $second_name;
 
