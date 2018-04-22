@@ -49,6 +49,11 @@ class Order
         $this->services = new ArrayCollection();
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function setOrderDate($orderDate)
     {
         $this->orderDate = $orderDate;

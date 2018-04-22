@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th style="width: 80px">Service</th>
+            <th style="width: 80px">Status</th>
+            <th >Notes</th>
+        </tr>
+        </thead>
+        {% for service in services %}
+            <tr>
+                <td>
+                    {{ service.service.title }}
+                </td>
+                <td>
+                    {{ service.status }}
+                </td>
+                <td>
+                    {{ service.note }}
+                </td>
+            </tr>
+        {% endfor %}
+    <table/>
+    <hr>
+    <a href="{{ path('order') }}" class = modern>Go Back</a>
+
+{% endblock %}
