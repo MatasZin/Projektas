@@ -17,6 +17,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class OrderController extends Controller
 {
     /**
+     * @Route("/order", name="order")
+     * @Method({"GET", "POST"})
+     */
+    public function index()
+    {
+        $user = $this->getUser();
+        $cars = $this->getDoctrine()->getRepository(Car::class)->findBy(array('owner'=>$user));
+        $orders = $this->getDoctrine()->getRepository(Order::class)->findBy(array('car'=>$cars));
+        return $this->render('order/index.html.twig', array ('orders' =>$orders));
+    }
+
+    /**
+     * @Route("/order/{id}", name="show_order")
+     */
+    public function show($id)
+    {
+        $services=$this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
+        return $this->render('order/show.html.twig', array ('services' => $services));
+    }
+  
      * @Route("/order/new", name="order_new")
      * @Method({"GET", "POST"})
      */

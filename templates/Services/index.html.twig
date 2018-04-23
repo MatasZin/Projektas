@@ -4,21 +4,24 @@
         <table>
             <thead>
             <tr>
-                <th>Service</th>
-                <th>Price</th>
+                <th style="width: 270px">Service</th>
+                <th style="width: 80px">Price</th>
+                <th>Options</th>
             </tr>
             </thead>
             <tbody>
             {% for service in services %}
                 <tr>
                     <td>{{ service.title }}</td>
-                    <td>{{ service.price }} €</td>
+                    <td style="text-align: right">{{ service.price }} €</td>
                     <td>
                         <a href="{{ path('Services') }}/{{ service.id }}"
                            class = modern>Details</a>
+                        {% if is_granted("ROLE_ADMIN") %}
                         <a href="{{ path('Services') }}/edit/{{ service.id }}"
                            class = modern>Edit</a>
                         <a class="danger" href="/Services/remove{{ service.id }}" >Remove</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
@@ -27,5 +30,7 @@
     {% else %}
         <p>No Services</p>
     {% endif %}
+    {% if is_granted("ROLE_ADMIN") %}
     <a href="{{ path('new_service') }}" class = modern>Create new service</a>
+    {% endif %}
 {% endblock %}
