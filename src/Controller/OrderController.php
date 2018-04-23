@@ -28,15 +28,9 @@ class OrderController extends Controller
         return $this->render('order/index.html.twig', array ('orders' =>$orders));
     }
 
+
+
     /**
-     * @Route("/order/{id}", name="show_order")
-     */
-    public function show($id)
-    {
-        $services=$this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
-        return $this->render('order/show.html.twig', array ('services' => $services));
-    }
-  
      * @Route("/order/new", name="order_new")
      * @Method({"GET", "POST"})
      */
@@ -94,17 +88,26 @@ class OrderController extends Controller
                     $entityManager->flush();
                 }
                 $step = 3;
-                return $this->render('order/index.html.twig', [
+                return $this->render('order/new.html.twig', [
                     'step' => $step,
                     'services' => $selectedServices,
                     'order' => $order
                 ]);
             }
         }
-        return $this->render('order/index.html.twig', [
+        return $this->render('order/new.html.twig', [
             'form1' => $form1->createView(),
             'form2' => $form2->createView(),
             'step' => $step,
         ]);
+    }
+
+    /**
+     * @Route("/order/{id}", name="show_order")
+     */
+    public function show($id)
+    {
+        $services=$this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
+        return $this->render('order/show.html.twig', array ('services' => $services));
     }
 }
