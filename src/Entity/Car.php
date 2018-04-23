@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CarRepository")
@@ -20,6 +21,11 @@ class Car
 
     /**
      * @ORM\Column(name="license_plate",type="string", length=10, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Regex(
+     *     "/^[A-Z 1-9]+$/",
+     *     message="Incorrect format of license plate. For example: CNA 534, JEY210..."
+     * )
      */
     private $licensePlate;
 
@@ -40,6 +46,11 @@ class Car
         $this->orders = new ArrayCollection();
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getLicensePlate()
     {
         return $this->licensePlate;
@@ -50,7 +61,7 @@ class Car
         $this->licensePlate = $licensePlate;
     }
 
-    public function setOwner($owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Car;
 use App\Entity\User;
+use App\Form\CarType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,16 +22,17 @@ class CarsController extends Controller
     public function RegisterCarAction(Request $request)
     {
         $user = $this->getUser();
+        $cars = $this->getDoctrine()->getRepository(Car::class)
+            ->findBy(array(
+                'owner' => $user,
+            ));
         $car = new Car();
-        $form = $this->createFormBuilder($car)
-            ->add('licensePlate', TextType::class, array(
-                'attr' => array('class' => 'simple-input')
-            ))
+        $form = $this->createForm(CarType::class, $car);
+        $form
             ->add('AddCar', SubmitType::class, array(
                 'label' => 'Add car',
                 'attr' => array('class' => 'modern')
-            ))
-            ->getForm();
+            ));
         $form->handleRequest($request);
 
         if ($form->isValid() && $form->isSubmitted()){
@@ -44,6 +46,7 @@ class CarsController extends Controller
 
         return $this->render('cars/index.html.twig', [
             'form' => $form->createView(),
+            'cars' => $cars,
         ]);
     }
 }

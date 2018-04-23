@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Car;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
@@ -36,6 +38,8 @@ class Order
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Car", inversedBy="orders")
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=false)
+     * @Assert\Type(type="App\Entity\Car")
+     * @Assert\Valid()
      */
     private $car;
 
@@ -53,7 +57,7 @@ class Order
     {
         return $this->id;
     }
-
+  
     public function setOrderDate($orderDate)
     {
         $this->orderDate = $orderDate;
@@ -81,12 +85,20 @@ class Order
         return $this->completed;
     }
 
-    public function setCar($car)
+    public function setCar(Car $car)
     {
         $this->car = $car;
     }
     public function getCar()
     {
         return $this->car;
+    }
+
+    public function getServices()
+    {
+        return $this->services;
+    }
+    public function setService(Services $services){
+        $this->services = $services;
     }
 }
