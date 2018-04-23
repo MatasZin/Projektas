@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    {% if step == 1 %}
+        {{ form_start(form1) }}
+        {{ form_errors(form1) }}
+        {{ form_widget(form1) }}
+        {{ form_end(form1) }}
+    {% elseif step == 2 %}
+        {{ form_start(form2) }}
+        {{ form_errors(form2) }}
+        {{ form_end(form2) }}
+    {% elseif step == 3 %}
+        <p>Congratulations! You are successfully register car to service.</p>
+        <p>It is your information:</p>
+        <h2>Selected car: {{ order.car.licensePlate }}, Date: {{ order.orderDate|date('Y-m-d H:i:s') }}</h2>
+        <p>It is you selected services:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Service</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set allPrice = 0 %}
+            {% for service in services['selectedService'] %}
+                <tr>
+                    <td>{{ service.title }}</td>
+                    <td>{{ service.price }} €</td>
+                    {% set allPrice = allPrice + service.price %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        All price: {{ allPrice }}
+    {% endif %}
+{% endblock %}
