@@ -1,11 +1,20 @@
 {% extends 'base.html.twig' %}
 {% block content %}
     {% if step == 1 %}
+        {% for message in app.flashes('warning') %}
+            {{ message }}
+        {% endfor %}
         {{ form_start(form1) }}
         {{ form_errors(form1) }}
         {{ form_widget(form1) }}
         {{ form_end(form1) }}
     {% elseif step == 2 %}
+        {% for message in app.flashes('warning') %}
+            <div style="font-size: 20px; color: red;">
+                {{ message }}
+            </div>
+
+        {% endfor %}
         {{ form_start(form2) }}
         {{ form_errors(form2) }}
         {{ form_end(form2) }}

@@ -36,7 +36,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(name="name", type="string", length=25, nullable=false)
      * @Assert\Regex(
-     *     "/^[a-Z]+$/",
+     *     "/^[a-zA-Z]+$/",
      *     message="Incorrect format of first name."
      * )
      */
@@ -45,7 +45,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(name="second_name", type="string", length=25, nullable=true)
      * @Assert\Regex(
-     *     "/^[a-Z]+$/",
+     *     "/^[a-zA-Z]+$/",
      *     message="Incorrect format of second name."
      * )
      */

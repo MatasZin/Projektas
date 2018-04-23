@@ -42,6 +42,7 @@ class OrderController extends Controller
             ->findBy(array(
                 'owner' => $user,
             ));
+
         $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
         $order = new Order();
         $form1 = $this->createForm(OrderType::class, $order, array(
@@ -51,7 +52,6 @@ class OrderController extends Controller
         $form2 = $this->createForm(ServicesType::class, $selectedServices, array(
             'services' => $services,
         ));
-
 
         $form1->handleRequest($request);
         $form2->handleRequest($request);
@@ -77,15 +77,32 @@ class OrderController extends Controller
                 $order = $this->getDoctrine()
                     ->getRepository(Order::class)
                     ->find((integer)$selectedServices['order']);
+                if ($selectedServices['selectedService'] == null){
+                    $this->addFlash("warning", "Please select at least one service!");
+                    $step = 2;
+                    return $this->render('order/new.html.twig', [
+                        'form1' => $form1->createView(),
+                        'form2' => $form2->createView(),
+                        'step' => $step,
+                    ]);
+                }
                 foreach ($selectedServices['selectedService'] as $selected){
-                    $temp = new OrderedService();
-                    $temp->setLastChangeDate();
-                    $temp->setNote('');
-                    $temp->setOrder($order);
-                    $temp->setService($selected);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($temp);
-                    $entityManager->flush();
+                    $ckeckAlreadyExist = $this->getDoctrine()->getRepository(OrderedService::class)
+                        ->findBy(array(
+                            'order' => $order,
+                            'service' => $selected,
+                        ));
+                    if ($ckeckAlreadyExist == null)
+                    {
+                        $temp = new OrderedService();
+                        $temp->setLastChangeDate();
+                        $temp->setNote('');
+                        $temp->setOrder($order);
+                        $temp->setService($selected);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($temp);
+                        $entityManager->flush();
+                    }
                 }
                 $step = 3;
                 return $this->render('order/new.html.twig', [
@@ -100,6 +117,13 @@ class OrderController extends Controller
             'form2' => $form2->createView(),
             'step' => $step,
         ]);
+    }
+
+    protected function addFlash($type, $message){
+        $flashbag = $this->get('session')->getFlashBag();
+
+        // Add flash message
+        $flashbag->add($type, $message);
     }
 
     /**
