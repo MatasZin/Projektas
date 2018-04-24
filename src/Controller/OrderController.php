@@ -2,14 +2,20 @@
 
 namespace App\Controller;
 
+use App\Criteria\OrderFilter;
 use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
 use App\Entity\Car;
 use App\Form\OrderType;
 use App\Form\ServicesType;
+use App\Repository\OrderRepository;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -133,5 +139,28 @@ class OrderController extends Controller
     {
         $services=$this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
         return $this->render('order/show.html.twig', array ('services' => $services));
+    }
+
+    /**
+     * @Route("/admin/orders", name="admin_orders")
+     */
+    public function admin_orders(Request $request)
+    {
+        $form = $this->createFormBuilder()
+            ->add('completeness', CheckboxType::class, array(
+                'label'=>"Show completed orders?", 'required'=>false))
+            ->add('orderby', ChoiceType::class, array(
+                'label'=>"Sort by: ", 'choices'=>array(
+                    'Date ordered'=>'orderDate', 'Date completed'=>'orderEndDate', 'Completeness'=>'completed')))
+            ->add('sortorder', ChoiceType::class, array(
+                'label'=>"Sorting order: ", 'choices'=>array('Ascending'=>'ASC', 'Descending'=>'DESC')))
+            ->add('submit', SubmitType::class, array(
+                'label'=>"Go!", 'attr' => array('class' => 'modern')))
+            ->getForm();
+        $form->handleRequest($request);
+        $filter = new OrderFilter($form);
+        $orders = $this->getDoctrine()->getRepository(Order::class)->findByOrderFilter($filter);
+        return $this->render('admin/orders/index.html.twig', array(
+            'form' => $form->createView(), 'message' => "List of orders:", 'orders' => $orders));
     }
 }
