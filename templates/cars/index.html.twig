@@ -1,10 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    Mano automobiliai:
-    {% for car in cars %}
-        <p>Valstybiniai numeriai: {{ car.licensePlate }}</p>
-    {% endfor %}
+    <p>My cars:</p>
+    <table style="margin-bottom: 20px;">
+        <thead>
+        <tr>
+            <th>License plate:</th>
+            <th>Number of orders:</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for car in cars %}
+            <tr>
+                <td>{{ car.licensePlate }}</td>
+                <td>{{ orderCount[car.id] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     {{ form_start(form) }}
     {{ form_errors(form) }}
     {{ form_widget(form) }}

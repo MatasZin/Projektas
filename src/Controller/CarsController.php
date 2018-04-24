@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Car;
+use App\Entity\Order;
 use App\Entity\User;
 use App\Form\CarType;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,6 +27,12 @@ class CarsController extends Controller
             ->findBy(array(
                 'owner' => $user,
             ));
+        $orderCount = array();
+        $doc = $this->getDoctrine()->getRepository(Order::class);
+        foreach ($cars as $car) {
+
+            $orderCount[$car->getId()] = $doc->countHowManyOrdersTheCarHave($car->getId());
+        }
         $car = new Car();
         $form = $this->createForm(CarType::class, $car);
         $form
@@ -41,12 +48,13 @@ class CarsController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($car);
             $entityManager->flush();
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('cars');
         }
 
         return $this->render('cars/index.html.twig', [
             'form' => $form->createView(),
             'cars' => $cars,
+            'orderCount' => $orderCount,
         ]);
     }
 }

@@ -17,7 +17,7 @@ class CarType extends AbstractType
             ->add('licensePlate', TextType::class, array(
                 'attr' => array(
                     'class' => 'simple-input',
-                    'style' => 'width: auto;'
+                    'style' => 'width: auto;',
                 ),
                 'label' => 'Your car license plate number:',
             ))
