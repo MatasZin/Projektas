@@ -1,39 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    {% if services %}
     <h1>{{ message }}</h1>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-    <br>
+    <form action="" method="get">
     <table>
         <tr>
-            <th>Date ordered</th>
-            <th>License plate</th>
-            <th>Is order completed</th>
-            <th>Date completed</th>
+            <th>Worker name</th>
+            <th>Service name</th>
+            <th>Status</th>
+            <th>Date last changed</th>
         </tr>
-        {% for order in orders %}
+        {% for service in services %}
             <tr>
                 <td>
-                    {{ order.orderDate|date('Y-m-d H:i:s') }}
+                    <select name="worker_{{ service.id }}">
+                        <option value="{{ service.worker.id }}" selected="selected">
+                            {{ service.worker.name }} {{ service.worker.secondName }}</option>
+                        {% for worker in workers %}
+                            {% if service.worker.id != worker.id %}
+                                <option value="{{ worker.id }}">{{ worker.name }} {{ worker.secondName }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                 </td>
                 <td>
-                    {{ order.car.licensePlate }}
+                    {{ service.service.title }}
                 </td>
-                {% if order.completed %}
-                    <td>Yes</td>
-                    <td>
-                        {{ order.orderEndDate|date('Y-m-d H:i:s') }}
-                    </td>
-                {% else %}
-                    <td>No</td>
-                    <td></td>
-                {% endif %}
                 <td>
-                    <a class="modern" href="/admin/orders/{{ order.id }}" >Details</a>
+                    <select name="status_{{ service.id }}">
+                        <option {%  if service.status == "Waiting" %} selected="selected" {% endif %} value="Waiting">Waiting</option>
+                        <option {%  if service.status == "In progress" %} selected="selected" {% endif %} value="In progress">In progress</option>
+                        <option {%  if service.status == "Done!" %} selected="selected" {% endif %} value="Done!">Done!</option>
+                    </select>
+                </td>
+                <td>
+                    {{ service.lastChangeDate|date('Y-m-d H:i:s') }}
                 </td>
             </tr>
         {% endfor %}
     </table>
+        <br>
+        <button type="submit" class="modern">Submit changes</button>
+    </form>
+    {% else %}
+        <h1>There are no services placed for this order!</h1>
+    {% endif %}
 {% endblock %}

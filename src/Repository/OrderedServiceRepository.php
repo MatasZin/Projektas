@@ -19,6 +19,12 @@ class OrderedServiceRepository extends ServiceEntityRepository
         parent::__construct($registry, OrderedService::class);
     }
 
+    public function getServicesCount($orderId)
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT COUNT(o.id) FROM App\Entity\OrderedService o')->getSingleScalarResult();
+    }
+
     /*
     public function findBySomething($value)
     {

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\OrderedService;
 use App\Entity\Services;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -107,5 +109,28 @@ class ServiceController extends Controller {
     {
         $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
         return $this->render('Services/show.html.twig', array ('service' => $service));
+    }
+
+    /**
+     * @Route("/admin/orders/{id}", name="admin_services")
+     */
+    public function admin_services(Request $request, $id) {
+
+        $count = $this->getDoctrine()->getRepository(OrderedService::class)->getServicesCount($id);
+
+        for ($i = 1; $i <= $count; $i++) {
+            if($request->get('status_'.$i)) {
+                $this->getDoctrine()->getRepository(OrderedService::class)->find($i)->setStatus($request->get('status_'.$i));
+            }
+            if($request->get('worker_'.$i)){
+                $worker = $this->getDoctrine()->getRepository(User::class)->find($request->get('worker_'.$i));
+                $this->getDoctrine()->getRepository(OrderedService::class)->find($i)->setWorker($worker);
+            }
+        }
+        $entityManager = $this->getDoctrine()->getManager()->flush();
+
+        $services = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
+        $workers = $this->getDoctrine()->getRepository(User::class)->findBy(array('role'=>'ROLE_WORKER'));
+        return $this->render('admin/services/index.html.twig', array('workers' => $workers, 'message' => "List of services:", 'services' => $services));
     }
 }
