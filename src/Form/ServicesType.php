@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Car;
 use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
@@ -20,7 +21,18 @@ class ServicesType extends AbstractType
     {
         $services = $options['services'];
         $builder
+            ->add('order', OrderType::class, array(
+                'cars' => $options['cars'],
+                'data_class' => Order::class,
+                'label' => ' ',
+                'attr' => array(
+                    'style' => 'margin: 5px 0px 20px 0px;'
+                ),
+            ))
             ->add('selectedService', ChoiceType::class, array(
+                'attr' => array(
+                    'style' => 'margin: 5px 0px 20px 0px;'
+                ),
                 'choices' => $services,
                 'choice_label' => function (Services $entity = null) {
                     return $entity ? $entity->getTitle() : '';
@@ -29,7 +41,6 @@ class ServicesType extends AbstractType
                 'expanded' => true,
                 'label' => 'Please select all services:',
             ))
-            ->add('order', HiddenType::class)
             ->add('save', SubmitType::class, array(
                 'attr' => array(
                     'class' => 'modern',
@@ -42,6 +53,7 @@ class ServicesType extends AbstractType
     {
         $resolver->setDefaults([
             'services' => Services::class,
+            'cars' => Car::class,
         ]);
     }
 
