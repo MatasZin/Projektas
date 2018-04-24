@@ -1,39 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>{{ message }}</h1>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-    <br>
-    <table>
-        <tr>
-            <th>Date ordered</th>
-            <th>License plate</th>
-            <th>Is order completed</th>
-            <th>Date completed</th>
-        </tr>
-        {% for order in orders %}
+    {% if orders %}
+        <h1>{{ message }}</h1>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        <br>
+        <table>
             <tr>
-                <td>
-                    {{ order.orderDate|date('Y-m-d H:i:s') }}
-                </td>
-                <td>
-                    {{ order.car.licensePlate }}
-                </td>
-                {% if order.completed %}
-                    <td>Yes</td>
-                    <td>
-                        {{ order.orderEndDate|date('Y-m-d H:i:s') }}
-                    </td>
-                {% else %}
-                    <td>No</td>
-                    <td></td>
-                {% endif %}
-                <td>
-                    <a class="modern" href="/admin/orders/{{ order.id }}" >Details</a>
-                </td>
+                <th>Date ordered</th>
+                <th>License plate</th>
+                <th>Is order completed</th>
+                <th>Date completed</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for order in orders %}
+                <tr>
+                    <td>
+                        {{ order.orderDate|date('Y-m-d H:i:s') }}
+                    </td>
+                    <td>
+                        {{ order.car.licensePlate }}
+                    </td>
+                    {% if order.completed %}
+                        <td>Yes</td>
+                        <td>
+                            {{ order.orderEndDate|date('Y-m-d H:i:s') }}
+                        </td>
+                    {% else %}
+                        <td>No</td>
+                        <td></td>
+                    {% endif %}
+                    <td>
+                        <a class="modern" href="/admin/orders/{{ order.id }}" >Details</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h1>There are no orders placed!</h1>
+    {% endif %}
 {% endblock %}
