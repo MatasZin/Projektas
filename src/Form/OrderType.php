@@ -26,12 +26,17 @@ class OrderType extends AbstractType
                 'format' => 'yyyy-MM-dd  HH:mm',
                 'attr' => array(
                     'class' => 'simple-input',
-                    'style' => 'width: auto;'
+                    'style' => 'width: auto; margin: 5px 0px 20px 0px;'
                 )
             ));
         if ($cars == null){
             $builder
-                ->add('car', CarType::class);
+                ->add('car', CarType::class, array(
+                    'data_class' => Car::class,
+                    'attr' => array(
+                        'style' => 'margin: 5px 0px 20px 0px;'
+                    )
+                ));
         }else{
             $builder
                 ->add('car', ChoiceType::class, array(
@@ -41,17 +46,11 @@ class OrderType extends AbstractType
                     },
                     'attr' => array(
                         'class' => 'custom-select',
+                        'style' => 'margin: 5px 0px 20px 0px;'
                     ),
                     'label' => 'Please select the car:'
                 ));
         }
-        $builder
-            ->add('next', SubmitType::class, array(
-                'attr' => array(
-                    'class' => 'modern',
-                )
-            ))
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

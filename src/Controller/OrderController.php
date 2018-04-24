@@ -44,20 +44,25 @@ class OrderController extends Controller
             ));
 
         $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
-        $order = new Order();
-        $form1 = $this->createForm(OrderType::class, $order, array(
-            'cars' => $cars,
-        ));
-        $selectedServices = null;
-        $form2 = $this->createForm(ServicesType::class, $selectedServices, array(
+        $allFormData = null;
+        $form1 = $this->createForm(ServicesType::class, $allFormData, array(
             'services' => $services,
+            'cars' => $cars,
         ));
 
         $form1->handleRequest($request);
-        $form2->handleRequest($request);
         if ('POST' == $request->getMethod()) {
-            if ($form1->getClickedButton() && 'next' === $form1->getClickedButton()->getName() && $form1->isValid()) {
-                $order = $form1->getData();
+            if ($form1->getClickedButton() && 'save' === $form1->getClickedButton()->getName()) {
+                $allFormData = $form1->getData();
+                if ($allFormData['selectedService'] == null){
+                    $this->addFlash("warning", "Please select at least one service!");
+                    $step = 1;
+                    return $this->render('order/new.html.twig', [
+                        'form1' => $form1->createView(),
+                        'step' => $step,
+                    ]);
+                }
+                $order = $allFormData['order'];
                 $order->setOrderEndDate(null);
                 $entityManager = $this->getDoctrine()->getManager();
                 if ($cars == null) {
@@ -66,55 +71,36 @@ class OrderController extends Controller
                     $entityManager->persist($newCar);
                     $entityManager->flush();
                 }
-                //$form2->get('order')->setData($order->getId());
                 $entityManager->persist($order);
                 $entityManager->flush();
-                $step = 2;
-                $form2->setData(array('order'=>$order->getId()));
-            }
-            if ($form2->getClickedButton() && 'save' === $form2->getClickedButton()->getName()) {
-                $selectedServices = $form2->getData();
-                $order = $this->getDoctrine()
-                    ->getRepository(Order::class)
-                    ->find((integer)$selectedServices['order']);
-                if ($selectedServices['selectedService'] == null){
-                    $this->addFlash("warning", "Please select at least one service!");
-                    $step = 2;
-                    return $this->render('order/new.html.twig', [
-                        'form1' => $form1->createView(),
-                        'form2' => $form2->createView(),
-                        'step' => $step,
-                    ]);
-                }
-                foreach ($selectedServices['selectedService'] as $selected){
-                    $ckeckAlreadyExist = $this->getDoctrine()->getRepository(OrderedService::class)
+
+                foreach ($allFormData['selectedService'] as $selected){
+                    $checkAlreadyExist = $this->getDoctrine()->getRepository(OrderedService::class)
                         ->findBy(array(
                             'order' => $order,
                             'service' => $selected,
                         ));
-                    if ($ckeckAlreadyExist == null)
+                    if ($checkAlreadyExist == null)
                     {
                         $temp = new OrderedService();
                         $temp->setLastChangeDate();
                         $temp->setNote('');
                         $temp->setOrder($order);
                         $temp->setService($selected);
-                        $entityManager = $this->getDoctrine()->getManager();
                         $entityManager->persist($temp);
                         $entityManager->flush();
                     }
                 }
-                $step = 3;
+                $step = 2;
                 return $this->render('order/new.html.twig', [
                     'step' => $step,
-                    'services' => $selectedServices,
+                    'services' => $allFormData,
                     'order' => $order
                 ]);
             }
         }
         return $this->render('order/new.html.twig', [
             'form1' => $form1->createView(),
-            'form2' => $form2->createView(),
             'step' => $step,
         ]);
     }
@@ -122,7 +108,6 @@ class OrderController extends Controller
     protected function addFlash($type, $message){
         $flashbag = $this->get('session')->getFlashBag();
 
-        // Add flash message
         $flashbag->add($type, $message);
     }
 

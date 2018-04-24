@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Order;
+use App\Entity\Car;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +18,19 @@ class OrderRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Order::class);
+    }
+
+    public function countHowManyOrdersTheCarHave($car)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT COUNT(o.id)
+                      FROM App\Entity\Order o
+                      INNER JOIN App\Entity\Car c WITH o.car = c.id
+                      WHERE c.id = :carsid'
+            )
+            ->setParameter('carsid', $car)
+            ->getSingleScalarResult();
     }
 
     /*
