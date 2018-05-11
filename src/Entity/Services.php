@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,11 +24,13 @@ class Services
 
     /**
      * @ORM\Column(name="title", type="text", length=100)
+     * @Assert\NotBlank()
      */
     private $title;
 
     /**
-     * @ORM\Column(name="price", type="integer", nullable=true)
+     * @ORM\Column(name="price", type="integer", nullable=false)
+     * @Assert\NotBlank()
      */
     private $price;
 
@@ -37,7 +40,7 @@ class Services
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="services")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="service")
      */
     private $assignedOrders;
 
@@ -47,6 +50,19 @@ class Services
     }
 
     // Getteres & Setters
+
+    /**
+     * @return Collection|OrderedService[]
+     */
+    public function getAssignedOrders(): Collection
+    {
+        return $this->assignedOrders;
+    }
+
+    public function addAssignedOrder(OrderedService $assignedOrder)
+    {
+        $this->assignedOrders->add($assignedOrder);
+    }
 
     public function getId(){return $this->id;}
 

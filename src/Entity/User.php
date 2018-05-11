@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,17 +25,20 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(name="email", type="string", length=254, unique=true)
+     * @Assert\NotBlank()
      * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $password;
 
     /**
      * @ORM\Column(name="name", type="string", length=25, nullable=false)
+     * @Assert\NotBlank()
      * @Assert\Regex(
      *     "/^[a-zA-Z]+$/",
      *     message="Incorrect format of first name."
@@ -53,29 +57,55 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
+     * @Assert\NotBlank()
      */
     private $isActive;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Car", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Car", mappedBy="owner")
      */
     private $cars;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="worker")
      */
     private $assignedServices;
+
+    /**
+     * @ORM\Column(name="role", type="string", length=25)
+     * @Assert\NotBlank()
+     */
+    private $role;
 
     public function __construct()
     {
         $this->isActive = true;
+        $this->role = 'ROLE_USER';
         $this->cars = new ArrayCollection();
         $this->assignedServices = new ArrayCollection();
     }
+
     /**
-     * @ORM\Column(name="role", type="string", length=25)
+     * @return Collection|Car[]
      */
-    private $role;
+    public function getCars(): Collection{
+        return $this->cars;
+    }
+
+    public function addCar(Car $car){
+        $this->cars->add($car);
+    }
+
+    /**
+     * @return Collection|OrderedService[]
+     */
+    public function getAssignedServices(): Collection{
+        return $this->assignedServices;
+    }
+
+    public function addAssignedService(OrderedService $assignedService){
+        $this->assignedServices->add($assignedService);
+    }
 
     public function getId(){
         return $this->id;

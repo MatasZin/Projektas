@@ -2,15 +2,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use App\Form\UserType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
 
 class WorkersController extends Controller {
@@ -37,30 +33,7 @@ class WorkersController extends Controller {
         $auth_checker = $this->get('security.authorization_checker');
         if($auth_checker->isGranted('ROLE_ADMIN')) {
             $user = new User();
-
-            $form = $this->createFormBuilder($user)
-                ->add('email', EmailType::class, array(
-                    'attr' => array('class' => 'simple-input')
-                ))
-                ->add('name', TextType::class, array(
-                    'required' => false,
-                    'attr' => array('class' => 'simple-input')
-                ))
-                ->add('second_name', TextType::class, array(
-                    'required' => false,
-                    'attr' => array('class' => 'simple-input')
-                ))
-                ->add('password', RepeatedType::class, array(
-                    'type' => PasswordType::class,
-                    'options' => array('attr' => array('class' => 'simple-input')),
-                    'first_options'  => array('label' => 'Password'),
-                    'second_options' => array('label' => 'Repeat Password'),
-                ))
-                ->add('register', SubmitType::class, array(
-                    'label' => 'Add new worker',
-                    'attr' => array('class' => 'modern')
-                ))
-                ->getForm();
+            $form = $this->createForm(UserType::class, $user);
 
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()){

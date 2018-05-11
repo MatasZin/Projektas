@@ -21,11 +21,13 @@ class OrderedService
 
     /**
      * @ORM\Column(name="status", type="string", length=20)
+     * @Assert\NotBlank()
      */
     private $status = "Waiting";
 
     /**
      * @ORM\Column(name="last_change_date", type="datetime")
+     * @Assert\NotBlank()
      */
     private $lastChangeDate;
 
@@ -35,19 +37,19 @@ class OrderedService
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="ordered_services")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="services")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id", nullable=false)
      */
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="ordered_services")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="assignedServices")
      * @ORM\JoinColumn(name="worker_id", referencedColumnName="id", nullable=true)
      */
     private $worker;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Services", inversedBy="ordered_services")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Services", inversedBy="assignedOrders")
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", nullable=false)
      */
     private $service;
