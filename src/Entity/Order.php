@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Car;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,6 +23,7 @@ class Order
 
     /**
      * @ORM\Column(name="order_date", type="datetime")
+     * @Assert\NotBlank()
      */
     private $orderDate;
 
@@ -32,19 +34,18 @@ class Order
 
     /**
      * @ORM\Column(name="completed", type="boolean")
+     * @Assert\NotBlank()
      */
     private $completed = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Car", inversedBy="orders")
      * @ORM\JoinColumn(name="car_id", referencedColumnName="id", nullable=false)
-     * @Assert\Type(type="App\Entity\Car")
-     * @Assert\Valid()
      */
     private $car;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="orders")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="order")
      */
     private $services;
 
@@ -94,11 +95,15 @@ class Order
         return $this->car;
     }
 
-    public function getServices()
+    /**
+     * @return Collection|OrderedService[]
+     */
+    public function getServices(): Collection
     {
         return $this->services;
     }
-    public function setService(Services $services){
-        $this->services = $services;
+
+    public function addService(OrderedService $service){
+        $this->services->add($service);
     }
 }

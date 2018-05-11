@@ -23,15 +23,12 @@ class CarsController extends Controller
     public function RegisterCarAction(Request $request)
     {
         $user = $this->getUser();
-        $cars = $this->getDoctrine()->getRepository(Car::class)
-            ->findBy(array(
-                'owner' => $user,
-            ));
+        $cars = $user->getCars();
         $orderCount = array();
-        $doc = $this->getDoctrine()->getRepository(Order::class);
+
         foreach ($cars as $car) {
 
-            $orderCount[$car->getId()] = $doc->countHowManyOrdersTheCarHave($car->getId());
+            $orderCount[$car->getId()] = sizeof($car->getOrders());
         }
         $car = new Car();
         $form = $this->createForm(CarType::class, $car);

@@ -2,13 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
-use App\Entity\Car;
-use App\Form\OrderType;
 use App\Form\ServicesType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,9 +19,13 @@ class OrderController extends Controller
     public function index()
     {
         $user = $this->getUser();
-        $cars = $this->getDoctrine()->getRepository(Car::class)->findBy(array('owner'=>$user));
-        $orders = $this->getDoctrine()->getRepository(Order::class)->findBy(array('car'=>$cars));
-        return $this->render('order/index.html.twig', array ('orders' =>$orders));
+        $cars = $user->getCars();
+
+        $orders = array();
+        foreach ($cars as $car){
+            $orders[] = $car->getOrders();
+        }
+        return $this->render('order/index.html.twig', array ('ordersArray' => $orders));
     }
 
 
@@ -38,10 +38,7 @@ class OrderController extends Controller
     {
         $step = 1;
         $user = $this->getUser();
-        $cars = $this->getDoctrine()->getRepository(Car::class)
-            ->findBy(array(
-                'owner' => $user,
-            ));
+        $cars = $user->getCars();
 
         $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
         $allFormData = null;

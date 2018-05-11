@@ -3,15 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Services;
+use App\Form\ServiceType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class ServiceController extends Controller {
     /**
@@ -30,19 +27,7 @@ class ServiceController extends Controller {
      */
     public function new(Request $request){
         $service = new Services();
-        $form = $this->createFormBuilder($service)
-            ->add('title', TextType::class, array(
-                'attr'=>array('class' => 'simple-input')))
-            ->add('price', NumberType::class, array(
-                'required' => false,
-                'attr'=>array('class' => 'simple-input')))
-            ->add('description', TextareaType::class,array(
-                'required' => false,
-                'attr' =>array('class' => 'simple-input')))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Create',
-                'attr' => array('class' => 'modern')))
-            ->getForm();
+        $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $service = $form->getData();
@@ -61,22 +46,8 @@ class ServiceController extends Controller {
      * Method({"GET", "POST"})
      */
     public function edit(Request $request, $id){
-        $service = new Services();
         $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
-
-        $form = $this->createFormBuilder($service)
-            ->add('title', TextType::class, array(
-                'attr'=>array('class' => 'simple-input')))
-            ->add('price', NumberType::class, array(
-                'required' => false,
-                'attr'=>array('class' => 'simple-input')))
-            ->add('description', TextType::class,array(
-                'required' => false,
-                'attr' =>array('class' => 'simple-input')))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Confirm',
-                'attr' => array('class' => 'modern')))
-            ->getForm();
+        $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager = $this->getDoctrine()->getManager();
