@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    {% if users %}
+        <h1>List of clients:</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.SecondName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <a href="{{ path('users') }}/{{ user.id }}"
+                           class = modern>Details</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+    {% else %}
+        <h1>There are no users to display!</h1>
+    {% endif %}
+
+{% endblock %}
