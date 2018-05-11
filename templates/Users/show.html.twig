@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <h1>Client {{ user.email }}</h1>
+
+    <p>Name: {{ user.name }}</p>
+    <p>Surname: {{ user.SecondName }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Owned cars</th>
+            </tr>
+        </thead>
+        {% for car in cars %}
+        <tr>
+            <td>
+                {{ car.licensePlate }}
+            </td>
+        </tr>
+        {% endfor %}
+    <table/>
+    <hr>
+    <a href="{{ path('users') }}" class = modern>Go Back</a>
+
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Criteria\OrderFilter;
 use App\Entity\Order;
 use App\Entity\Car;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -18,6 +19,16 @@ class OrderRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Order::class);
+    }
+
+    public function findByOrderFilter(OrderFilter $filter)
+    {
+        $querry = $this->createQueryBuilder('o');
+        if (!$filter->getCompleteness()) {
+            $querry->where('o.completed = 0');
+        }
+        $querry->add('orderBy', "o." . $filter->getOrderby() . " " . $filter->getSortorder());
+        return $querry->getQuery()->getResult();
     }
 
     public function countHowManyOrdersTheCarHave($car)

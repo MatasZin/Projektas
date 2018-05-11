@@ -30,11 +30,12 @@
                     <li class="navBtn"><a class="{{ 'register' in route ? 'active' }}" href="{{ path('cars') }}">Register a car</a></li>
                     <li class="navBtn"><a class="{{ 'progress' in route ? 'active' }}" href="{{ path('order') }}">Check progress</a></li>
                     {% elseif is_granted("ROLE_WORKER") or is_granted("ROLE_ADMIN") %}
-                    <li class="navBtn"><a class="{{ 'client' in route ? 'active' }}" href="#progress">Clients</a></li>
-                    <li class="navBtn"><a class="{{ 'user' in route ? 'active' }}" href="#users">Remaining jobs</a></li>
+                    <li class="navBtn"><a class="{{ 'users' in route ? 'active' }}" href="{{ path('users') }}">Clients</a></li>
+                    <li class="navBtn"><a class="{{ 'remainingJobs' in route ? 'active' }}" href="#users">Remaining jobs</a></li>
                     {% endif %}
                     {% if is_granted("ROLE_ADMIN") %}
                     <li class="navBtn"><a class="{{ 'worker' in route ? 'active' }}" href="{{ path('workers') }}">See list of workers</a></li>
+                    <li class="navBtn"><a class="{{ 'admin_orders' in route ? 'active' }}" href="{{ path('admin_orders') }}">See list of orders</a></li>
                     {% endif %}
                     <li class="navBtn"><a class="{{ 'service' in route ? 'active' }}" href="{{ path('Services') }}">See list of services</a></li>
                 {% endblock %}

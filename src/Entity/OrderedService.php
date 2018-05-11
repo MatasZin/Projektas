@@ -54,6 +54,11 @@ class OrderedService
      */
     private $service;
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getStatus()
     {
         return $this->status;
