@@ -8,6 +8,7 @@ use App\Entity\OrderedService;
 use App\Entity\Services;
 use App\Form\ServicesType;
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -31,9 +32,10 @@ class OrderController extends Controller
 
         $orders = array();
         foreach ($cars as $car){
-            $orders[] = $car->getOrders();
+            $ordersTmp = $car->getOrders();
+            $orders = array_merge($orders, $ordersTmp->toArray());
         }
-        return $this->render('order/index.html.twig', array ('ordersArray' => $orders));
+        return $this->render('order/index.html.twig', array ('orders' => $orders));
     }
 
 

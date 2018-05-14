@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {% for flashes in app.flashes %}
+        {% for message in flashes %}
+            <div style="font-size: 20px; color: red; margin-bottom: 20px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <a href="{{ path('myProfile_changePassword') }}" class="modern" style="margin-top: 10px;">Change password</a>
+
+{% endblock %}
