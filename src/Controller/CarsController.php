@@ -39,7 +39,7 @@ class CarsController extends Controller
             ));
         $form->handleRequest($request);
 
-        if ($form->isValid() && $form->isSubmitted()){
+        if ($form->isSubmitted() && $form->isValid()){
             $car = $form->getData();
             $car->setOwner($user);
             $entityManager = $this->getDoctrine()->getManager();

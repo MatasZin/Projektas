@@ -28,7 +28,9 @@ class RegisterController extends Controller
         }
 
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, array(
+            'button_label' => 'Register',
+        ));
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
@@ -40,7 +42,7 @@ class RegisterController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('login');
         }
 
 
