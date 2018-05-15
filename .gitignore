@@ -1,6 +1,9 @@
 # PhpStorm
 /.idea
 
+# DB config
+/.env
+
 # Email spool folder
 /app/spool/*
 
