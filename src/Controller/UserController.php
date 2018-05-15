@@ -5,6 +5,7 @@ use App\Entity\Car;
 use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\UserType;
+use App\Form\OrderOptionsType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -87,4 +88,21 @@ class UserController extends Controller {
         return $this->render('Users/show.html.twig', array ('user' => $user, 'cars' => $cars));
     }
 
+    /**
+     * @Route("/Users/orders/{id}", name="user_order_show")
+     */
+    public function showOrders($id, Request $request)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $cars = $user->getCars();
+        $orders = array();
+        foreach ($cars as $car){
+            $ordersArray = $car->getOrders();
+            $orders = array_merge($orders, $ordersArray->toArray());
+        }
+        $form=$this->createForm(OrderOptionsType::class);
+        $form->handleRequest($request);
+        return $this->render('admin/orders/index.html.twig', array (
+            'form' => $form->createView(), 'message' => "List of orders:",'orders' => $orders));
+    }
 }
