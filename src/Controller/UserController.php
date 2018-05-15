@@ -34,14 +34,14 @@ class UserController extends Controller {
         $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user, array(
             'button_label' => 'Save',
+            'is_edit' => 'true',
         ));
         $form->remove('password');
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
-            $this->addFlash("warning", "Profile is successfully updated!");
-            $this->addFlash("notice", "Profile is successfully updated!2");
+            $this->addFlash("notice", "Profile is successfully updated!");
             return $this->render('Users/myProfile.html.twig', array(
                 'form' => $form->createView(),
             ));
@@ -62,13 +62,15 @@ class UserController extends Controller {
             $data = $form->getData();
             $encoderService = $this->container->get('security.password_encoder');
             if ($encoderService->isPasswordValid($user, $data['password'])){
-
                 $password = $encoder->encodePassword($user, $data['newPassword']);
                 $user->setPassword($password);
 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->flush();
-                return $this->redirectToRoute('homepage');
+                $this->addFlash("notice", "Password is successfully changed!");
+                return $this->render('Users/changePassword.html.twig', array(
+                    'form' => $form->createView(),
+                ));
             }else{
                 $form->get('password')->addError(new FormError("Current password is invalid."));
             }
