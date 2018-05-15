@@ -39,6 +39,12 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(name="name", type="string", length=25, nullable=false)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 25,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      * @Assert\Regex(
      *     "/^[a-zA-Z]+$/",
      *     message="Incorrect format of first name."
@@ -48,6 +54,12 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(name="second_name", type="string", length=25, nullable=true)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 25,
+     *      minMessage = "Your second name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your second name cannot be longer than {{ limit }} characters"
+     * )
      * @Assert\Regex(
      *     "/^[a-zA-Z]+$/",
      *     message="Incorrect format of second name."
