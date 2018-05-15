@@ -19,6 +19,8 @@
                     <td>
                         <a href="{{ path('users') }}/{{ user.id }}"
                            class = modern>Details</a>
+                        <a href="{{ path('users') }}/orders/{{ user.id }}"
+                           class = modern>Orders</a>
                     </td>
                 </tr>
             {% endfor %}
