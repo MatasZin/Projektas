@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Criteria\OrderFilter;
 use App\Entity\Order;
+use App\Entity\User;
 use App\Entity\Car;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -30,6 +31,7 @@ class OrderRepository extends ServiceEntityRepository
         $querry->add('orderBy', "o." . $filter->getOrderby() . " " . $filter->getSortorder());
         return $querry->getQuery()->getResult();
     }
+
 
     public function countHowManyOrdersTheCarHave($car)
     {

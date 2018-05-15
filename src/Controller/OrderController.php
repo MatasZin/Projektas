@@ -7,6 +7,7 @@ use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
 use App\Form\ServicesType;
+use App\Form\OrderOptionsType;
 use App\Repository\OrderRepository;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -130,17 +131,7 @@ class OrderController extends Controller
      */
     public function admin_orders(Request $request)
     {
-        $form = $this->createFormBuilder()
-            ->add('completeness', CheckboxType::class, array(
-                'label'=>"Show completed orders?", 'required'=>false))
-            ->add('orderby', ChoiceType::class, array(
-                'label'=>"Sort by: ", 'choices'=>array(
-                    'Date ordered'=>'orderDate', 'Date completed'=>'orderEndDate', 'Completeness'=>'completed')))
-            ->add('sortorder', ChoiceType::class, array(
-                'label'=>"Sorting order: ", 'choices'=>array('Ascending'=>'ASC', 'Descending'=>'DESC')))
-            ->add('submit', SubmitType::class, array(
-                'label'=>"Go!", 'attr' => array('class' => 'modern')))
-            ->getForm();
+        $form=$this->createForm(OrderOptionsType::class);
         $form->handleRequest($request);
         $filter = new OrderFilter($form);
         $orders = $this->getDoctrine()->getRepository(Order::class)->findByOrderFilter($filter);
