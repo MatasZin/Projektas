@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class UserType extends AbstractType
 {
@@ -20,6 +21,7 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, array(
                 'attr' => array('class' => 'simple-input'),
                 'label' => 'Email *',
+                'disabled' => $options['is_edit'],
             ))
             ->add('name', TextType::class, array(
                 'attr' => array('class' => 'simple-input'),
@@ -32,6 +34,7 @@ class UserType extends AbstractType
             ))
             ->add('password', RepeatedType::class, array(
                 'type' => PasswordType::class,
+                'constraints' =>  new Length(array('min' => 4)),
                 'invalid_message' => 'Passwords do not match.',
                 'options' => array('attr' => array('class' => 'simple-input')),
                 'first_options'  => array('label' => 'Password *'),
@@ -49,6 +52,7 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'button_label' => 'Submit',
+            'is_edit' => 'false',
         ]);
     }
 }
