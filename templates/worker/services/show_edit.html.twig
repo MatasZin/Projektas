@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <h1>{{ title }}</h1>
+    {% if services != null %}
+        <form action="" method="get">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service name</th>
+                        <th>Car</th>
+                        <th>Status</th>
+                        <th>Date last changed</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                {% for service in services %}
+                    <tr>
+                        <td>
+                            <a href="/Services/{{ service.service.id }}">{{ service.service.title }}</a>
+                        </td>
+                        <td>{{ service.order.car.licensePlate }}</td>
+                        <td>
+                            <select name="status_{{ service.id }}">
+                                <option {%  if service.status == "Waiting" %} selected="selected" {% endif %} value="Waiting">Waiting</option>
+                                <option {%  if service.status == "In progress" %} selected="selected" {% endif %} value="In progress">In progress</option>
+                                <option {%  if service.status == "Done!" %} selected="selected" {% endif %} value="Done!">Done!</option>
+                            </select>
+                        </td>
+                        <td>{{ service.lastChangeDate|date('Y-m-d H:i:s') }}</td>
+                        <td><input type="text" name="note_{{ service.id }}" value="{{ service.note }}"></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <button type="submit" class="modern">Submit changes</button>
+        </form>
+    {% else %}
+        <p>There are no ordered services!</p>
+    {% endif %}
+
+{% endblock %}
