@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
 use App\Form\ServiceType;
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class ServiceController extends Controller {
+
     /**
      * @Route("/Services", name="Services")
      * @Method({"GET", "POST"})
@@ -83,34 +85,11 @@ class ServiceController extends Controller {
     }
 
     /**
-     * @Route("/admin/orders/{id}", name="admin_services")
+     * @Route("/admin/orders/{order_id}", name="admin_jobs")
      */
-    public function admin_services(Request $request, $id) {
-
-        $count = $this->getDoctrine()->getRepository(OrderedService::class)->getServicesCount($id);
-
-        for ($i = 1; $i <= $count; $i++) {
-            if($request->get('status_'.$i)) {
-                $this->getDoctrine()->getRepository(OrderedService::class)->find($i)->setStatus($request->get('status_'.$i));
-            }
-            if($request->get('worker_'.$i)){
-                $worker = $this->getDoctrine()->getRepository(User::class)->find($request->get('worker_'.$i));
-                $this->getDoctrine()->getRepository(OrderedService::class)->find($i)->setWorker($worker);
-            }
-        }
-        $entityManager = $this->getDoctrine()->getManager()->flush();
-
-        $services = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
+    public function admin_services(Request $request, $order_id) {
+        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$order_id));
         $workers = $this->getDoctrine()->getRepository(User::class)->findBy(array('role'=>'ROLE_WORKER'));
-        return $this->render('admin/services/index.html.twig', array('workers' => $workers, 'message' => "List of services:", 'services' => $services));
-    }
-
-    /**
-     * @Route("/orderedServices", name="worker_services")
-     */
-    public function worker_services(Request $request) {
-        
-        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findAll();
         $count = count($orderedServices);
 
         $isChangedOnce = false;
@@ -121,11 +100,30 @@ class ServiceController extends Controller {
                 $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setStatus($request->get('status_'.$id));
                 $isChanged = true;
                 $isChangedOnce = true;
+                if($request->get('status_'.$id) === 'Done!') {
+                    $order = $this->getDoctrine()->getRepository(Order::class)->find($orderedServices[$i]->getOrder()->getId());
+                    $order->setCompleted(1);
+                    $order->setOrderEndDate(new \DateTime());
+                }
             }
             if($request->get('note_'.$id) !== $orderedServices[$i]->getNote() && $request->get('note_'.$id) !== null) {
                 $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setNote($request->get('note_'.$id));
                 $isChanged = true;
                 $isChangedOnce = true;
+            }
+            if($request->get('worker_'.$id) !== null && $request->get('worker_'.$id) != -1){
+                if($orderedServices[$i]->getWorker() === null) {
+                    $worker = $this->getDoctrine()->getRepository(User::class)->find($request->get('worker_'.$id));
+                    $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setWorker($worker);
+                    $isChanged = true;
+                    $isChangedOnce = true;
+                }
+                elseif ($request->get('worker_'.$id) != $orderedServices[$i]->getWorker()->getId()) {
+                    $worker = $this->getDoctrine()->getRepository(User::class)->find($request->get('worker_'.$id));
+                    $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setWorker($worker);
+                    $isChanged = true;
+                    $isChangedOnce = true;
+                }
             }
             if($isChanged) {
                 $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setLastChangeDate();
@@ -135,6 +133,63 @@ class ServiceController extends Controller {
             $this->getDoctrine()->getManager()->flush();
         }
 
-        return $this->render('worker/services/show_edit.html.twig', array('title' => "List of jobs", 'services' => $orderedServices));
+        return $this->render('jobs/show_edit.html.twig', array('workers' => $workers, 'title' => "List of all jobs:", 'services' => $orderedServices));
+    }
+
+    /**
+     * @Route("/orderedServices", name="worker_jobs")
+     */
+    public function worker_services(Request $request) {
+
+        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findAll();
+        $count = count($orderedServices);
+
+        $workers = null;
+        if($this->isGranted("ROLE_ADMIN")) {
+            $workers = $this->getDoctrine()->getRepository(User::class)->findBy(array('role'=>'ROLE_WORKER'));
+        }
+
+        $isChangedOnce = false;
+        for ($i = 0; $i < $count; $i++) {
+            $id = $orderedServices[$i]->getId();
+            $isChanged = false;
+            if($request->get('status_'.$id) !== $orderedServices[$i]->getStatus() && $request->get('status_'.$id) !== null) {
+                $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setStatus($request->get('status_'.$id));
+                $isChanged = true;
+                $isChangedOnce = true;
+                if($request->get('status_'.$id) === 'Done!') {
+                    $order = $this->getDoctrine()->getRepository(Order::class)->find($orderedServices[$i]->getOrder()->getId());
+                    $order->setCompleted(1);
+                    $order->setOrderEndDate(new \DateTime());
+                }
+            }
+            if($request->get('note_'.$id) !== $orderedServices[$i]->getNote() && $request->get('note_'.$id) !== null) {
+                $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setNote($request->get('note_'.$id));
+                $isChanged = true;
+                $isChangedOnce = true;
+            }
+            if($this->isGranted("ROLE_ADMIN") && $request->get('worker_'.$id) !== null && $request->get('worker_'.$id) != -1){
+                if($orderedServices[$i]->getWorker() === null) {
+                    $worker = $this->getDoctrine()->getRepository(User::class)->find($request->get('worker_'.$id));
+                    $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setWorker($worker);
+                    $isChanged = true;
+                    $isChangedOnce = true;
+                }
+                elseif ($request->get('worker_'.$id) != $orderedServices[$i]->getWorker()->getId()) {
+                    $worker = $this->getDoctrine()->getRepository(User::class)->find($request->get('worker_'.$id));
+                    $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setWorker($worker);
+                    $isChanged = true;
+                    $isChangedOnce = true;
+                }
+            }
+            if($isChanged) {
+                $this->getDoctrine()->getRepository(OrderedService::class)->find($id)->setLastChangeDate();
+            }
+        }
+        if($isChangedOnce) {
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        return $this->render('jobs/show_edit.html.twig', array('title' => "List of jobs", 'services' => $orderedServices, 'workers' => $workers));
     }
 }

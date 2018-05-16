@@ -8,6 +8,7 @@
             <table>
                 <thead>
                     <tr>
+                        {% if is_granted("ROLE_ADMIN") %}<th>Worker name</th>{% endif %}
                         <th>Service name</th>
                         <th>Car</th>
                         <th>Status</th>
@@ -17,6 +18,23 @@
                 </thead>
                 {% for service in services %}
                     <tr>
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <td>
+                                <select name="worker_{{ service.id }}">
+                                    {% if service.worker != null %}
+                                        {% for worker in workers %}
+                                            <option value="{{ worker.id }}" {% if service.worker.id == worker.id %}selected="selected"{% endif %}>
+                                                {{ worker.name }} {{ worker.secondName }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value=-1 selected="selected">Worker not assigned!</option>
+                                        {% for worker in workers %}
+                                            <option value="{{ worker.id }}">{{ worker.name }} {{ worker.secondName }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </td>
+                        {% endif %}
                         <td>
                             <a href="/Services/{{ service.service.id }}">{{ service.service.title }}</a>
                         </td>
