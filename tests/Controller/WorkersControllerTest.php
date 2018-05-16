@@ -10,8 +10,8 @@ class WorkersControllerTest extends WebTestCase
     public function testWorkersPageAsUser()
     {
         $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'mantas@mantas.lt',
-            'PHP_AUTH_PW'   => '123456789',
+            'PHP_AUTH_USER' => 'paprastas@gmail.com',
+            'PHP_AUTH_PW'   => '123456',
         ));
         $client->request('GET', '/workers');
 
@@ -22,8 +22,8 @@ class WorkersControllerTest extends WebTestCase
     public function testWorkersPageAsAdmin()
     {
         $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'admin@admin.lt',
-            'PHP_AUTH_PW'   => 'admin',
+            'PHP_AUTH_USER' => 'Matas@gmail.com',
+            'PHP_AUTH_PW'   => 'matas123',
         ));
         $client->request('GET', '/workers');
 

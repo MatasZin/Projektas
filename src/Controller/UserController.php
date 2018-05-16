@@ -34,7 +34,7 @@ class UserController extends Controller {
         $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user, array(
             'button_label' => 'Save',
-            'is_edit' => 'true',
+            'is_edit' => true,
         ));
         $form->remove('password');
         $form->handleRequest($request);
@@ -86,7 +86,7 @@ class UserController extends Controller {
     public function show($id)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $cars = $this->getDoctrine()->getRepository(Car::class)->findBy(array('owner' => $user));
+        $cars = $user->getCars();
         return $this->render('Users/show.html.twig', array ('user' => $user, 'cars' => $cars));
     }
 
