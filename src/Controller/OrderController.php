@@ -63,8 +63,26 @@ class OrderController extends Controller
             if ($form1->getClickedButton() && 'save' === $form1->getClickedButton()->getName()) {
                 $allFormData = $form1->getData();
                 if ($allFormData['selectedService'] == null){
+                    if($allFormData['order']->getOrderDate() === null) $this->addFlash("warning", "Please select date and time!");
                     $this->addFlash("warning", "Please select at least one service!");
                     $step = 1;
+                    $form1 = $this->createForm(ServicesType::class, $allFormData, array(
+                        'services' => $services,
+                        'cars' => $cars,
+                    ));
+                    return $this->render('order/new.html.twig', [
+                        'form1' => $form1->createView(),
+                        'step' => $step,
+                    ]);
+                }
+                if($allFormData['order']->getOrderDate() === null) {
+                    if ($allFormData['selectedService'] == null) $this->addFlash("warning", "Please select at least one service!");
+                    $this->addFlash("warning", "Please select date and time!");
+                    $step = 1;
+                    $form1 = $this->createForm(ServicesType::class, $allFormData, array(
+                        'services' => $services,
+                        'cars' => $cars,
+                    ));
                     return $this->render('order/new.html.twig', [
                         'form1' => $form1->createView(),
                         'step' => $step,

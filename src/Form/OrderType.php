@@ -8,27 +8,28 @@ use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\CallbackTransformer;
 
 class OrderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $cars = $options['cars'];
-        $builder
-            ->add('orderDate', DateTimeType::class, array(
-                'data' => new \DateTime(),
-                'label' => 'Select the time you want for the service:',
-                'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'yyyy-MM-dd  HH:mm',
-                'attr' => array(
-                    'class' => 'simple-input',
-                    'style' => 'width: auto; margin: 5px 0px 20px 0px;'
-                )
-            ));
+        $builder->add('orderDate', HiddenType::class);
+        $builder->get('orderDate')->addModelTransformer(new CallbackTransformer(
+            function ($orderDateAsDateTime) {
+                if($orderDateAsDateTime != null) return $orderDateAsDateTime->format("Y-m-d H:i");
+                else return null;
+            },
+            function ($orderDateAsString) {
+                if($orderDateAsString !== null) return \DateTime::createFromFormat("Y-m-d H:i", $orderDateAsString);
+                else return null;
+            }
+        ));
         if ($cars == null){
             $builder
                 ->add('car', CarType::class, array(
