@@ -53,7 +53,22 @@
             startView: 2,
             forceParse: 0,
             showMeridian: 0,
-            initialDate: null
+            daysOfWeekDisabled: [0,6],
+            initialDate: null,
+            minuteStep: 30,
+            onRenderDay: function(date) {
+                {% for date in limitDates %}
+                if (date.getDate() === {{ date|date('d') }} && date.getUTCMonth() === {{ date|date('m') }} - 1 && date.getFullYear() === {{ date|date('Y') }})
+                    return ['disabled'];
+                {% endfor %}
+            },
+            onRenderMinute: function(date) {
+                {% for date in allDates %}
+                if (date.getDate() === {{ date|date('d') }} && date.getUTCMonth() === {{ date|date('m') }} - 1 && date.getFullYear() === {{ date|date('Y') }}
+                    && date.getUTCHours() === {{ date|date('H') }} && date.getUTCMinutes() === {{ date|date('i') }})
+                    return ['disabled'];
+                {% endfor %}
+            }
         });
     </script>
 {% endblock %}
