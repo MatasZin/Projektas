@@ -44,6 +44,11 @@ class OrderRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function getAllOrderDates() {
+        $dates = $this->createQueryBuilder('o')->select('o.orderDate')->getQuery()->getResult();
+        return array_column($dates, 'orderDate');
+    }
+
     /*
     public function findBySomething($value)
     {

@@ -39,7 +39,33 @@ class OrderController extends Controller
         return $this->render('order/index.html.twig', array ('orders' => $orders));
     }
 
+    private function getDatesAndCounts($allDates) {
+        $uniqueDates = array();
+        for ($i = 0; $i < count($allDates); $i++) {
+            if($allDates[$i] !== null) {
+                $currentDate = $allDates[$i]->format('Y-m-d');
+                $allDates[$i] = null;
+                $uniqueDates[] = array('date' => \DateTime::createFromFormat("Y-m-d", $currentDate), 'count' => 1);
+                for ($j = 0; $j < count($allDates); $j++) {
+                    if ($allDates[$j] !== null && $allDates[$j]->format('Y-m-d') === $currentDate) {
+                        $uniqueDates[count($uniqueDates) - 1]['count'] += 1;
+                        $allDates[$j] = null;
+                    }
+                }
+            }
+        }
+        return $uniqueDates;
+    }
 
+    private function getForbiddenDays($datesAndCounts, $limit) {
+        $forbiddenDates = array();
+        foreach ($datesAndCounts as $date) {
+            if($date['count'] >= $limit) {
+                $forbiddenDates[] = $date['date'];
+            }
+        }
+        return $forbiddenDates;
+    }
 
     /**
      * @Route("/order/new", name="order_new")
@@ -50,6 +76,8 @@ class OrderController extends Controller
         $step = 1;
         $user = $this->getUser();
         $cars = $user->getCars();
+        $allDates = $this->getDoctrine()->getRepository(Order::class)->getAllOrderDates();
+        $limitDates = $this->getForbiddenDays($this->getDatesAndCounts($allDates), 10);
 
         $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
         $allFormData = null;
@@ -73,6 +101,8 @@ class OrderController extends Controller
                     return $this->render('order/new.html.twig', [
                         'form1' => $form1->createView(),
                         'step' => $step,
+                        'allDates' => $allDates,
+                        'limitDates' => $limitDates
                     ]);
                 }
                 if($allFormData['order']->getOrderDate() === null) {
@@ -86,6 +116,8 @@ class OrderController extends Controller
                     return $this->render('order/new.html.twig', [
                         'form1' => $form1->createView(),
                         'step' => $step,
+                        'allDates' => $allDates,
+                        'limitDates' => $limitDates
                     ]);
                 }
                 $order = $allFormData['order'];
@@ -121,13 +153,17 @@ class OrderController extends Controller
                 return $this->render('order/new.html.twig', [
                     'step' => $step,
                     'services' => $allFormData,
-                    'order' => $order
+                    'order' => $order,
+                    'allDates' => $allDates,
+                    'limitDates' => $limitDates
                 ]);
             }
         }
         return $this->render('order/new.html.twig', [
             'form1' => $form1->createView(),
             'step' => $step,
+            'allDates' => $allDates,
+            'limitDates' => $limitDates
         ]);
     }
 
