@@ -10,7 +10,7 @@ https://trello.com/b/Fwdqqrqy/semester-project
 Requirements
 Apache 2.0
 MYSQL 5.0
-PHP 7.0
+PHP 7.2
 composer
 
 Basic how to set up project
