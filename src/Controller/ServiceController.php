@@ -122,14 +122,17 @@ class ServiceController extends Controller {
     }
 
     /**
-     * @Route("/worker/jobs", name="worker_jobs")
+     * @Route("/jobs", name="jobs")
      */
     public function worker_services(Request $request) {
 
-        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('worker' => $this->getUser()));
+        $orderedServices = array();
+        if($this->isGranted("ROLE_WORKER"))
+            $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('worker' => $this->getUser()));
 
         $workers = null;
         if($this->isGranted("ROLE_ADMIN")) {
+            $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findAll();
             $workers = $this->getDoctrine()->getRepository(User::class)->findBy(array('role'=>'ROLE_WORKER'));
         }
 
