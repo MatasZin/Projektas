@@ -4,6 +4,10 @@
 
     <h1>{{ title }}</h1>
     {% if services != null %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        <br>
         <form action="" method="get">
             <table>
                 <thead>
