@@ -126,7 +126,7 @@ class ServiceController extends Controller {
      */
     public function worker_services(Request $request) {
 
-        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findAll();
+        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('worker' => $this->getUser()));
 
         $workers = null;
         if($this->isGranted("ROLE_ADMIN")) {
