@@ -86,8 +86,13 @@ class UserController extends Controller {
     public function show($id)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $cars = $user->getCars();
-        return $this->render('Users/show.html.twig', array ('user' => $user, 'cars' => $cars));
+        if ($user !== null) {
+            $cars = $user->getCars()->filter( function($entry) {
+                return $entry->getIsActive() === TRUE;
+            });
+            return $this->render('Users/show.html.twig', array ('user' => $user, 'cars' => $cars));
+        }
+        return $this->redirectToRoute('homepage');
     }
 
     /**
@@ -96,15 +101,18 @@ class UserController extends Controller {
     public function showOrders($id, Request $request)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-        $cars = $user->getCars();
-        $orders = array();
-        foreach ($cars as $car){
-            $ordersArray = $car->getOrders();
-            $orders = array_merge($orders, $ordersArray->toArray());
+        if ($user !== null){
+            $cars = $user->getCars();
+            $orders = array();
+            foreach ($cars as $car){
+                $ordersArray = $car->getOrders();
+                $orders = array_merge($orders, $ordersArray->toArray());
+            }
+            $form=$this->createForm(OrderOptionsType::class);
+            $form->handleRequest($request);
+            return $this->render('admin/orders/index.html.twig', array (
+                'form' => $form->createView(), 'message' => "List of orders:",'orders' => $orders));
         }
-        $form=$this->createForm(OrderOptionsType::class);
-        $form->handleRequest($request);
-        return $this->render('admin/orders/index.html.twig', array (
-            'form' => $form->createView(), 'message' => "List of orders:",'orders' => $orders));
+        return $this->redirectToRoute('homepage');
     }
 }

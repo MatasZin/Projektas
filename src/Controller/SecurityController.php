@@ -22,10 +22,10 @@ class SecurityController extends Controller
      */
     public function loginAction(Request $request, AuthenticationUtils $authenticationUtils){
 
-        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
+        /*if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
         {
             return $this->redirect($this->generateUrl('homepage'));
-        }
+        }*/
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -92,7 +92,7 @@ class SecurityController extends Controller
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(array(
             'forgetPasswordToken' => $token,
         ));
-        if($user == null)
+        if($user === null)
         {
             $this->get('session')->getFlashBag()->add(
                 'warning',

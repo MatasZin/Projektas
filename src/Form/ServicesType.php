@@ -26,20 +26,17 @@ class ServicesType extends AbstractType
                 'data_class' => Order::class,
                 'label' => ' ',
                 'attr' => array(
-                    'style' => 'margin: 5px 0px 20px 0px;'
+                    'style' => 'margin: 5px 0px 15px 0px;'
                 ),
             ))
             ->add('selectedService', ChoiceType::class, array(
-                'attr' => array(
-                    'style' => 'margin: 5px 0px 20px 0px;'
-                ),
                 'choices' => $services,
                 'choice_label' => function (Services $entity = null) {
                     return $entity ? $entity->getTitle() : '';
                 },
                 'multiple' => true,
                 'expanded' => true,
-                'label' => 'Please select all services:',
+                'label' => 'Please select services:',
             ))
             ->add('save', SubmitType::class, array(
                 'attr' => array(
