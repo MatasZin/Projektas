@@ -25,6 +25,14 @@ class Services
     /**
      * @ORM\Column(name="title", type="text", length=100)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 4,
+     *      minMessage = "Title must be at least {{ limit }} characters long."
+     * )
+     * @Assert\Regex(
+     *     "/^[a-z A-Z]+$/",
+     *     message="Incorrect format of title."
+     * )
      */
     private $title;
 
@@ -40,12 +48,18 @@ class Services
     private $description;
 
     /**
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     * @Assert\Type("bool")
+     */
+    private $isActive;
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\OrderedService", mappedBy="service")
      */
     private $assignedOrders;
 
     public function __construct()
     {
+        $this->isActive = true;
         $this->assignedOrders = new ArrayCollection();
     }
 
@@ -74,5 +88,13 @@ class Services
 
     public function getDescription(){return $this->description;}
     public function setDescription($description){$this->description = $description;}
+
+    public function setIsActive($isActive){
+        $this->isActive = $isActive;
+    }
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
 
 }

@@ -1,19 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <div class="form-centered">
+        {% for message in app.flashes('warning') %}
+            <div class="flashes-warning">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('successful') %}
+            <div class="flashes-successful">{{ message }}</div>
+        {% endfor %}
 
-    <form action="{{ path('login') }}" method="post" class="form-centered">
         {% if error %}
-            <div style="font-size: 20px; color: red; margin-bottom: 20px;">
-                {{ error.message | replace({"Bad credentials." : "Invalid email or password."}) }}
+            <div class="flashes-error">
+                {{ error.message | replace({"Bad credentials." : "Invalid email or password.", "User account is disabled." : "Your account is not active. Please confirm email first."}) }}
             </div>
         {% endif %}
-        <label for="_email">Email:</label>
-        <input type="text" id="_email" name="_email" value="{{ last_username }}" class="simple-input" />
+        <form action="{{ path('login') }}" method="post">
 
-        <label for="_password">Password:</label>
-        <input type="password" id="_password" name="_password" class="simple-input" />
+            <label for="_email">Email:</label>
+            <input type="text" id="_email" name="_email" value="{{ last_username }}" class="simple-input" />
 
-        <button type="submit" class="modern">Login</button>
-    </form>
+            <label for="_password">Password:</label>
+            <input type="password" id="_password" name="_password" class="simple-input" />
+
+            <button type="submit" class="modern">Login</button>
+        </form>
+        <br>
+        Forget password? <a href="{{ path('resetPassword') }}">Reset password</a>
+    </div>
 {% endblock %}

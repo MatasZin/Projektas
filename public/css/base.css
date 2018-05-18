@@ -116,6 +116,7 @@ li.navBtn a:hover:not(.active) {
     display: inline-block;
     padding: 8px 25px;
     background: #F1B720;
+    text-align: center;
     border: 1px solid rgba(0,0,0,0.15);
     border-radius: 4px;
     transition: all 0.3s ease-out;
@@ -127,40 +128,20 @@ li.navBtn a:hover:not(.active) {
     text-decoration: none;
     text-shadow: 0 1px rgba(255,255,255,0.7);
 }
-
-
 .danger {
-    color: #222222;
+    color: #fff;
     display: inline-block;
     padding: 8px 25px;
-    background: #C82829;
-    border: 1px solid rgba(0,0,0,0.15);
+    background-color: #e42739;
+    text-align: center;
+    border: 1px solid #dc3545;
     border-radius: 4px;
-    transition: all 0.3s ease-out;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    text-decoration: none;
     box-shadow:
             inset 0 1px 0 rgba(255,255,255,0.5),
             0 2px 2px rgba(0,0,0,0.3),
             0 0 4px 1px rgba(0,0,0,0.2);
-    /* Font styles */
-    text-decoration: none;
-    text-shadow: 0 1px rgba(255,255,255,0.7);
-}
-
-.danger {
-    color: #222222;
-    display: inline-block;
-    padding: 8px 25px;
-    background: #C82829;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    transition: all 0.3s ease-out;
-    box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.5),
-            0 2px 2px rgba(0,0,0,0.3),
-            0 0 4px 1px rgba(0,0,0,0.2);
-    /* Font styles */
-    text-decoration: none;
-    text-shadow: 0 1px rgba(255,255,255,0.7);
 }
 
 .danger:hover {
@@ -185,6 +166,7 @@ table{
 
 table, th, td{
     padding: 8px 5px;
+    margin-bottom: 10px;
     border: 1px solid rgba(0,0,0,0.15);
     transition: all 0.3s ease-out;
     text-shadow: 0 1px rgba(255,255,255,0.7);
@@ -213,4 +195,20 @@ td{
             0 2px 2px rgba(0,0,0,0.3),
             0 0 4px 1px rgba(0,0,0,0.2);
     text-shadow: 0 1px rgba(255,255,255,0.7);
+}
+
+.flashes-warning{
+    font-size: 20px;
+    color: orange;
+    margin-bottom: 20px;
+}
+.flashes-successful{
+    font-size: 20px;
+    color: green;
+    margin-bottom: 20px;
+}
+.flashes-error{
+    font-size: 20px;
+    color: red;
+    margin-bottom: 20px;
 }

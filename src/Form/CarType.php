@@ -22,12 +22,22 @@ class CarType extends AbstractType
                 'label' => 'Your car license plate number:',
             ))
         ;
+
+        if ($options['need_button']){
+            $builder
+                ->add('AddCar', SubmitType::class, array(
+                    'label' => 'Add car',
+                    'attr' => array('class' => 'modern')
+                ))
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Car::class,
+            'need_button' => true,
         ]);
     }
 }

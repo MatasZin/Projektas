@@ -1,12 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    {% for message in app.flashes('successful') %}
+        <div class="flashes-successful">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('warning') %}
+        <div class="flashes-warning">{{ message }}</div>
+    {% endfor %}
     <p>My cars:</p>
     <table style="margin-bottom: 20px;">
         <thead>
         <tr>
             <th>License plate:</th>
             <th>Number of orders:</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -14,6 +21,7 @@
             <tr>
                 <td>{{ car.licensePlate }}</td>
                 <td>{{ orderCount[car.id] }}</td>
+                <td><a class="danger" href="/cars/remove/{{ car.id }}" >Remove</a></td>
             </tr>
         {% endfor %}
         </tbody>

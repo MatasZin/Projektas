@@ -20,12 +20,13 @@ class RegisterController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request, UserPasswordEncoderInterface $encoder)
+    public function index(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer)
     {
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
         {
             return $this->redirect($this->generateUrl('homepage'));
         }
+
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user, array(
@@ -38,16 +39,72 @@ class RegisterController extends Controller
 
             $password = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
+            $date = new \DateTime();
+            $uniqueString = $user->getEmail(). '' .$date->format('Y-m-d H:i:s');
+            $token = str_replace(array('/', '+', '='), '', base64_encode($uniqueString));
+            $user->setConfirmationToken($token);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('login');
+
+
+            if ($this->sendConfirmationEmail($user->getEmail(), $token, $user->getName(), $mailer)){
+                return $this->render('register/confirmationSent.html.twig', array(
+                    'email' => $user->getEmail(),
+                ));
+            }
         }
 
 
         return $this->render('register/index.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    public function sendConfirmationEmail($email, $token, $name, \Swift_Mailer $mailer){
+        $message = (new \Swift_Message('Registration confirmation'))
+            ->setFrom(['paumanma@gmail.com' => 'PauManMa services'])
+            ->setTo($email)
+            ->setBody(
+                $this->renderView('emails/registration.html.twig', array(
+                    'name' => $name,
+                    'token' => $token,
+                )),
+                'text/html'
+            );
+        if (!$mailer->send($message, $failures)) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+     * @Route("/confirm/{token}", name="confirmAccount")
+     */
+    public function Confirm($token)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(array(
+            'confirmationToken' => $token,
+        ));
+        if($user == null)
+        {
+            $this->get('session')->getFlashBag()->add(
+                'warning',
+                'Account with this confirmation token is not found!'
+            );
+            return $this->redirectToRoute('login');
+        }
+        $user->setIsActive(true);
+        $user->setConfirmationToken(null);
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'successful',
+            'Your account is confirm successfully. You can login now.'
+        );
+
+        return $this->redirectToRoute('login');
     }
 }

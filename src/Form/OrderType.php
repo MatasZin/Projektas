@@ -30,13 +30,15 @@ class OrderType extends AbstractType
                 else return null;
             }
         ));
-        if ($cars == null){
+        if ($cars->isEmpty()){
             $builder
                 ->add('car', CarType::class, array(
                     'data_class' => Car::class,
+                    'need_button' => false,
                     'attr' => array(
                         'style' => 'margin: 5px 0px 20px 0px;'
-                    )
+                    ),
+                    'label' => 'Car registration:',
                 ));
         }else{
             $builder
