@@ -19,8 +19,10 @@ class ServiceController extends Controller {
      */
     public function index()
     {
-        $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
-        return $this->render('Services/index.html.twig', array ('services' =>$services));
+        $services = $this->getDoctrine()->getRepository(Services::class)->findBy(array(
+            'isActive' => true,
+        ));
+        return $this->render('Services/index.html.twig', array ('services' => $services));
     }
 
     /**
@@ -48,17 +50,24 @@ class ServiceController extends Controller {
      * Method({"GET", "POST"})
      */
     public function edit(Request $request, $id){
-        $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
-        $form = $this->createForm(ServiceType::class, $service);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->flush();
-            return $this->redirectToRoute('Services');
-        }
+        $service=$this->getDoctrine()->getRepository(Services::class)->findOneBy(array(
+            'id' => $id,
+            'isActive' => true,
+        ));
+        if ($service !== null){
+            $form = $this->createForm(ServiceType::class, $service);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()){
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->flush();
+                return $this->redirectToRoute('Services');
+            }
 
-        return $this->render('Services/edit.html.twig', array(
-            'form' => $form->createView()));
+            return $this->render('Services/edit.html.twig', array(
+                'form' => $form->createView()));
+        }
+        return $this->redirectToRoute('Services');
+
     }
 
     /**
@@ -66,11 +75,21 @@ class ServiceController extends Controller {
      * @Method({"GET"})
      */
     public function remove($id) {
-        $service = $this->getDoctrine()->getRepository(Services::class)->find($id);
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($service);
-        $entityManager->flush();
-        return $this->index();
+        $service = $this->getDoctrine()->getRepository(Services::class)->findOneBy(array(
+            'id' => $id,
+            'isActive' => true,
+        ));
+        if ($service !== null){
+            $entityManager = $this->getDoctrine()->getManager();
+            $service->setIsActive(false);
+            $entityManager->flush();
+            $this->get('session')->getFlashBag()->add(
+                'successful',
+                'Service was removed successfully!'
+            );
+            return $this->redirectToRoute('Services');
+        }
+        return $this->redirectToRoute('Services');
     }
 
     /**
@@ -78,8 +97,14 @@ class ServiceController extends Controller {
      */
     public function show($id)
     {
-        $service=$this->getDoctrine()->getRepository(Services::class)->find($id);
-        return $this->render('Services/show.html.twig', array ('service' => $service));
+        $service = $this->getDoctrine()->getRepository(Services::class)->findOneBy(array(
+            'id' => $id,
+            'isActive' => true,
+        ));
+        if ($service !== null){
+            return $this->render('Services/show.html.twig', array ('service' => $service));
+        }
+        return $this->redirectToRoute('Services');
     }
 
     /**
@@ -98,7 +123,7 @@ class ServiceController extends Controller {
                 $this->getDoctrine()->getRepository(OrderedService::class)->find($i)->setWorker($worker);
             }
         }
-        $entityManager = $this->getDoctrine()->getManager()->flush();
+        $this->getDoctrine()->getManager()->flush();
 
         $services = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
         $workers = $this->getDoctrine()->getRepository(User::class)->findBy(array('role'=>'ROLE_WORKER'));

@@ -23,13 +23,25 @@ class Car
     /**
      * @ORM\Column(name="license_plate",type="string", length=10, nullable=false)
      * @Assert\NotBlank()
+     *
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 6,
+     *      minMessage = "License plate number must be at least {{ limit }} characters long",
+     *      maxMessage = "License plate number cannot be longer than {{ limit }} characters"
+     * )
      * @Assert\Regex(
-     *     "/^[A-Z 0-9]+$/",
-     *     message="Incorrect format of license plate. For example: CNA 534, JEY210..."
+     *     "/^[A-Z0-9]+$/",
+     *     message="Incorrect format of license plate. For example: CNA534, JEY210..."
      * )
      */
     private $licensePlate;
 
+    /**
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     * @Assert\Type("bool")
+     */
+    private $isActive;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="cars")
@@ -44,6 +56,7 @@ class Car
 
     public function __construct()
     {
+        $this->isActive = true;
         $this->orders = new ArrayCollection();
     }
 
@@ -82,6 +95,13 @@ class Car
     public function getOwner()
     {
         return $this->owner;
+    }
+    public function setIsActive($isActive){
+        $this->isActive = $isActive;
+    }
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 
 }

@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block content %}
     {% if services %}
+        {% for message in app.flashes('successful') %}
+            <div class="flashes-successful">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('warning') %}
+            <div class="flashes-warning">{{ message }}</div>
+        {% endfor %}
         <table>
             <thead>
             <tr>

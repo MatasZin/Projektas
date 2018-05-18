@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Criteria\OrderFilter;
+use App\Entity\Car;
 use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
@@ -29,7 +30,9 @@ class OrderController extends Controller
     public function index()
     {
         $user = $this->getUser();
-        $cars = $user->getCars();
+        $cars = $user->getCars()->filter( function($entry) {
+            return $entry->getIsActive() === TRUE;
+        });
 
         $orders = array();
         foreach ($cars as $car){
@@ -49,15 +52,18 @@ class OrderController extends Controller
     {
         $step = 1;
         $user = $this->getUser();
-        $cars = $user->getCars();
+        $cars = $user->getCars()->filter( function($entry) {
+            return $entry->getIsActive() === TRUE;
+        });
 
-        $services = $this->getDoctrine()->getRepository(Services::class)->findAll();
+        $services = $this->getDoctrine()->getRepository(Services::class)->findBy(array(
+            'isActive' => true,
+        ));
         $allFormData = null;
         $form1 = $this->createForm(ServicesType::class, $allFormData, array(
             'services' => $services,
             'cars' => $cars,
         ));
-
         $form1->handleRequest($request);
         if ('POST' == $request->getMethod()) {
             if ($form1->getClickedButton() && 'save' === $form1->getClickedButton()->getName()) {
@@ -73,15 +79,58 @@ class OrderController extends Controller
                 $order = $allFormData['order'];
                 $order->setOrderEndDate(null);
                 $entityManager = $this->getDoctrine()->getManager();
-                if ($cars == null) {
-                    $newCar = $order->getCar();
-                    $newCar->setOwner($user);
-                    $entityManager->persist($newCar);
-                    $entityManager->flush();
-                }
-                $entityManager->persist($order);
-                $entityManager->flush();
+                $car = $order->getCar();
+                /********************   CAR REGISTRATION    ******************/
+                if ($cars->isEmpty()) {
+                    $carTaken = $this->getDoctrine()->getRepository(Car::class)->findOneBy(
+                        array(
+                            'licensePlate' => $car->getLicensePlate(),
+                            'isActive' => true,
+                        )
+                    );
 
+                    if ($carTaken === null){
+                        $getCarIfUserIsOwner = $this->getDoctrine()->getRepository(Car::class)->findOneBy(
+                            array(
+                                'owner' => $user,
+                                'licensePlate' => $car->getLicensePlate(),
+                                'isActive' => False,
+                            )
+                        );
+                        if ($getCarIfUserIsOwner === null){
+                            $car->setOwner($user);
+                            $entityManager->persist($car);
+                        }else{
+                            $getCarIfUserIsOwner->setIsActive(true);
+                        }
+                    }else{
+                        $this->addFlash("warning", "This car is already registered on our system!");
+                        $step = 1;
+                        return $this->render('order/new.html.twig', [
+                            'form1' => $form1->createView(),
+                            'step' => $step,
+                        ]);
+                    }
+                /********************   CAR REGISTRATION DONE   **********************/
+                }else{
+                /********************   CAR SELECTED THINGS   **********************/
+                    $carOrders = $car->getOrders()->filter( function($entry) {
+                        return $entry->getCompleted() === FALSE;
+                    });
+                    if (!$carOrders->isEmpty()){
+                        $this->addFlash("warning", "You can't choose this car, because it has unfinished order!");
+                        $step = 1;
+                        return $this->render('order/new.html.twig', [
+                            'form1' => $form1->createView(),
+                            'step' => $step,
+                        ]);
+                    }
+                /********************   CAR SELECTED DONE   **********************/
+                }
+
+                $entityManager->persist($order);
+
+                /********************  SELECTED SERVICE THINGS  *********************/
                 foreach ($allFormData['selectedService'] as $selected){
                     $checkAlreadyExist = $this->getDoctrine()->getRepository(OrderedService::class)
                         ->findBy(array(
@@ -96,9 +145,10 @@ class OrderController extends Controller
                         $temp->setOrder($order);
                         $temp->setService($selected);
                         $entityManager->persist($temp);
-                        $entityManager->flush();
                     }
                 }
+                $entityManager->flush();
+                /********************  SELECTED SERVICE DONE   *********************/
                 $step = 2;
                 return $this->render('order/new.html.twig', [
                     'step' => $step,
@@ -113,19 +163,17 @@ class OrderController extends Controller
         ]);
     }
 
-    protected function addFlash($type, $message){
-        $flashbag = $this->get('session')->getFlashBag();
-
-        $flashbag->add($type, $message);
-    }
-
     /**
      * @Route("/order/{id}", name="show_order")
      */
     public function show($id)
     {
-        $services=$this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
-        return $this->render('order/show.html.twig', array ('services' => $services));
+        $services = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
+
+        if (!empty($services)){
+            return $this->render('order/show.html.twig', array ('services' => $services));
+        }
+        return $this->redirectToRoute('order');
     }
 
     /**

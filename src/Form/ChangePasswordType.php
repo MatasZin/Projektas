@@ -24,8 +24,8 @@ class ChangePasswordType extends AbstractType
                 'constraints' =>  new Length(array('min' => 4)),
                 'invalid_message' => 'Passwords do not match.',
                 'options' => array('attr' => array('class' => 'simple-input')),
-                'first_options'  => array('label' => 'Password *'),
-                'second_options' => array('label' => 'Repeat Password *'),
+                'first_options'  => array('label' => 'New Password'),
+                'second_options' => array('label' => 'Repeat new Password'),
             ))
             ->add('change', SubmitType::class, array(
                 'label' => 'Change password',

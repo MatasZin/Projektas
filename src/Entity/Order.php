@@ -34,9 +34,9 @@ class Order
 
     /**
      * @ORM\Column(name="completed", type="boolean")
-     * @Assert\NotBlank()
+     * @Assert\Type("bool")
      */
-    private $completed = false;
+    private $completed;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Car", inversedBy="orders")
@@ -51,6 +51,7 @@ class Order
 
     public function __construct()
     {
+        $this->completed = false;
         $this->services = new ArrayCollection();
     }
 

@@ -62,11 +62,17 @@ class WorkersController extends Controller {
     public function remove($id) {
         $auth_checker = $this->get('security.authorization_checker');
         if($auth_checker->isGranted('ROLE_ADMIN')) {
-            $user = $this->getDoctrine()->getRepository(User::class)->find($id);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
+            $worker = $this->getDoctrine()->getRepository(User::class)->findOneBy(array(
+                'id' => $id,
+                'role' => 'ROLE_WORKER',
+
+            ));
+            if ($worker !== null){
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($worker);
+                $entityManager->flush();
+            }
         }
-            return $this->index();
+        return $this->redirectToRoute('workers');
     }
 }

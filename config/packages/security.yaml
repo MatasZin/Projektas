@@ -51,7 +51,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     #access_denied_url: /login
     access_control:
-         - { path: ^/(login|register), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/(login|register|confirm|reset), roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/workers, roles: ROLE_ADMIN }
          - { path: ^/Services/new, roles: ROLE_ADMIN }
          - { path: ^/Services/edit, roles: ROLE_ADMIN }

@@ -2,10 +2,7 @@
 {% block content %}
     {% if step == 1 %}
         {% for message in app.flashes('warning') %}
-            <div style="font-size: 20px; color: red; margin-bottom: 20px;">
-                {{ message }}
-            </div>
-
+            <div class="flashes-warning">{{ message }}</div>
         {% endfor %}
         {{ form_start(form1) }}
         {{ form_errors(form1) }}
@@ -35,5 +32,7 @@
             </tbody>
         </table>
         <p>Preliminary price: {{ allPrice }} €</p>
+        <hr>
+        <a href="{{ path('order') }}" class = modern>Go Back</a>
     {% endif %}
 {% endblock %}

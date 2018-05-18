@@ -36,7 +36,7 @@ class RegisterControllerTest extends WebTestCase
 
     public function testRegistrationPage()
     {
-        //$client = static::createClient();
+        //$this->client = static::createClient();
 
         $this->client->request('GET', '/register');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
@@ -47,17 +47,18 @@ class RegisterControllerTest extends WebTestCase
         //$client = static::createClient();
 
         $crawler = $this->client->request('GET', '/register');
-        $form = $crawler->selectButton('Register')->form();
 
+        $form = $crawler->selectButton('Register')->form();
         // set some values
         $form['user[email]'] = 'Lucas@hotmail.com';
         $form['user[name]'] = 'Lucas';
-        $form['user[second_name]'] = 'asd';
+        $form['user[second_name]'] = 'Mantas';
         $form['user[password][first]'] = '123456';
         $form['user[password][second]'] = '123456';
 
         // submit the form
         $this->client->submit($form);
+
         $this->client->followRedirect();
         //test response
         $this->assertEquals(200,

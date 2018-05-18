@@ -23,7 +23,7 @@ class OrderedService
      * @ORM\Column(name="status", type="string", length=20)
      * @Assert\NotBlank()
      */
-    private $status = "Waiting";
+    private $status;
 
     /**
      * @ORM\Column(name="last_change_date", type="datetime")
@@ -44,7 +44,7 @@ class OrderedService
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="assignedServices")
-     * @ORM\JoinColumn(name="worker_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="worker_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     private $worker;
 
@@ -53,6 +53,11 @@ class OrderedService
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id", nullable=false)
      */
     private $service;
+
+    public function __construct()
+    {
+        $this->status = "Waiting";
+    }
 
     public function getId()
     {

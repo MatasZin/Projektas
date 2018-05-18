@@ -34,14 +34,14 @@ class UserController extends Controller {
         $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user, array(
             'button_label' => 'Save',
-            'is_edit' => 'true',
+            'is_edit' => true,
         ));
         $form->remove('password');
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
-            $this->addFlash("notice", "Profile is successfully updated!");
+            $this->addFlash("successful", "Profile is successfully updated!");
             return $this->render('Users/myProfile.html.twig', array(
                 'form' => $form->createView(),
             ));
@@ -60,14 +60,14 @@ class UserController extends Controller {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
-            $encoderService = $this->container->get('security.password_encoder');
-            if ($encoderService->isPasswordValid($user, $data['password'])){
+            //$encoderService = $this->container->get('security.password_encoder');
+            if ($encoder->isPasswordValid($user, $data['password'])){
                 $password = $encoder->encodePassword($user, $data['newPassword']);
                 $user->setPassword($password);
 
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->flush();
-                $this->addFlash("notice", "Password is successfully changed!");
+                $this->addFlash("successful", "Password is successfully changed!");
                 return $this->render('Users/changePassword.html.twig', array(
                     'form' => $form->createView(),
                 ));

@@ -52,7 +52,7 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'button_label' => 'Submit',
-            'is_edit' => 'false',
+            'is_edit' => false,
         ]);
     }
 }

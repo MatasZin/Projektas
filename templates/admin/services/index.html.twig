@@ -15,12 +15,12 @@
             <tr>
                 <td>
                     <select name="worker_{{ service.id }}">
-                        {% if service.worker != null %}
-                            <option value="{{ service.worker.id }}" selected="selected">
-                                {{ service.worker.name }} {{ service.worker.secondName }}</option>
-                        {% endif %}
                         {% for worker in workers %}
+                            {% if service.worker == worker %}
+                                <option value="{{ worker.id }}" selected="selected">{{ worker.name }} {{ worker.secondName }}</option>
+                            {% else %}
                                 <option value="{{ worker.id }}">{{ worker.name }} {{ worker.secondName }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </td>

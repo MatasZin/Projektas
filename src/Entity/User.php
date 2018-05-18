@@ -6,15 +6,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"id", "email"}, message="This email is already taken.")
+ * @UniqueEntity(fields={"email"}, message="This email is already taken.")
+ * @UniqueEntity(fields={"id"}, message="The generated id are already exist, please report it to admin!")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @ORM\Id()
@@ -69,9 +71,27 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
-     * @Assert\NotBlank()
+     * @Assert\Type("bool")
      */
     private $isActive;
+
+    /**
+     * @ORM\Column(name="is_deleted", type="boolean")
+     * @Assert\Type("bool")
+     */
+    private $isDeleted;
+
+    /**
+     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     */
+    private $confirmationToken;
+
+    /**
+     * @ORM\Column(name="forget_token", type="string", length=255, nullable=true)
+     * @Assert\Type("string")
+     */
+    private $forgetPasswordToken;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Car", mappedBy="owner")
@@ -91,7 +111,8 @@ class User implements UserInterface, \Serializable
 
     public function __construct()
     {
-        $this->isActive = true;
+        $this->isActive = false;
+        $this->isDeleted = false;
         $this->role = 'ROLE_USER';
         $this->cars = new ArrayCollection();
         $this->assignedServices = new ArrayCollection();
@@ -155,6 +176,26 @@ class User implements UserInterface, \Serializable
         $this->second_name = $second_name;
     }
 
+    public function setConfirmationToken($confirmationToken){
+        $this->confirmationToken = $confirmationToken;
+    }
+
+    public function setForgetPasswordToken($forgetPasswordToken){
+        $this->forgetPasswordToken = $forgetPasswordToken;
+    }
+
+    public function getIsDeleted(){
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted){
+        $this->isDeleted = $isDeleted;
+    }
+
+    public function setIsActive($isActive){
+        $this->isActive = $isActive;
+    }
+
     public function setRole($role){
         $this->role = $role;
     }
@@ -180,7 +221,7 @@ class User implements UserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
-        return true;
+        return (!$this->isDeleted);
     }
 
     public function isCredentialsNonExpired()

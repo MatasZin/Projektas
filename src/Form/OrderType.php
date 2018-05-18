@@ -29,13 +29,15 @@ class OrderType extends AbstractType
                     'style' => 'width: auto; margin: 5px 0px 20px 0px;'
                 )
             ));
-        if ($cars == null){
+        if ($cars->isEmpty()){
             $builder
                 ->add('car', CarType::class, array(
                     'data_class' => Car::class,
+                    'need_button' => false,
                     'attr' => array(
                         'style' => 'margin: 5px 0px 20px 0px;'
-                    )
+                    ),
+                    'label' => 'Car registration:',
                 ));
         }else{
             $builder
