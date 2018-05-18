@@ -22,12 +22,6 @@ class RegisterController extends Controller
      */
     public function index(Request $request, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer)
     {
-        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
-            return $this->redirect($this->generateUrl('homepage'));
-        }
-
-
         $user = new User();
         $form = $this->createForm(UserType::class, $user, array(
             'button_label' => 'Register',
@@ -88,23 +82,17 @@ class RegisterController extends Controller
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(array(
             'confirmationToken' => $token,
         ));
-        if($user == null)
+        if($user !== null)
         {
+            $user->setIsActive(true);
+            $user->setConfirmationToken(null);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'warning',
-                'Account with this confirmation token is not found!'
+                'successful',
+                'Your account is confirmed successfully. You can login now.'
             );
-            return $this->redirectToRoute('login');
         }
-        $user->setIsActive(true);
-        $user->setConfirmationToken(null);
-        $em = $this->getDoctrine()->getManager();
-        $em->flush();
-        $this->get('session')->getFlashBag()->add(
-            'successful',
-            'Your account is confirm successfully. You can login now.'
-        );
-
         return $this->redirectToRoute('login');
     }
 }

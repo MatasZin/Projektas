@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class OrderController extends Controller
 {
@@ -96,24 +97,9 @@ class OrderController extends Controller
         if ('POST' == $request->getMethod()) {
             if ($form1->getClickedButton() && 'save' === $form1->getClickedButton()->getName()) {
                 $allFormData = $form1->getData();
-                if ($allFormData['selectedService'] == null){
+                if ($allFormData['selectedService'] == null || $allFormData['order']->getOrderDate() === null){
                     if($allFormData['order']->getOrderDate() === null) $this->addFlash("warning", "Please select date and time!");
-                    $this->addFlash("warning", "Please select at least one service!");
-                    $step = 1;
-                    $form1 = $this->createForm(ServicesType::class, $allFormData, array(
-                        'services' => $services,
-                        'cars' => $cars,
-                    ));
-                    return $this->render('order/new.html.twig', [
-                        'form1' => $form1->createView(),
-                        'step' => $step,
-                        'allDates' => $allDates,
-                        'limitDates' => $limitDates
-                    ]);
-                }
-                if($allFormData['order']->getOrderDate() === null) {
-                    if ($allFormData['selectedService'] == null) $this->addFlash("warning", "Please select at least one service!");
-                    $this->addFlash("warning", "Please select date and time!");
+                    if($allFormData['selectedService'] == null) $this->addFlash("warning", "Please select at least one service!");
                     $step = 1;
                     $form1 = $this->createForm(ServicesType::class, $allFormData, array(
                         'services' => $services,
@@ -159,6 +145,8 @@ class OrderController extends Controller
                         return $this->render('order/new.html.twig', [
                             'form1' => $form1->createView(),
                             'step' => $step,
+                            'allDates' => $allDates,
+                            'limitDates' => $limitDates
                         ]);
                     }
                 /********************   CAR REGISTRATION DONE   **********************/
@@ -173,6 +161,8 @@ class OrderController extends Controller
                         return $this->render('order/new.html.twig', [
                             'form1' => $form1->createView(),
                             'step' => $step,
+                            'allDates' => $allDates,
+                            'limitDates' => $limitDates
                         ]);
                     }
                 /********************   CAR SELECTED DONE   **********************/
@@ -218,14 +208,19 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/order/{id}", name="show_order")
+     * @Route("/order/{order_id}", name="show_order")
+     * @ParamConverter("order", class="App\Entity\Order", options={"id" = "order_id"})
      */
-    public function show($id)
+    public function show(Order $order = null)
     {
-        $services = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('order'=>$id));
-
-        if (!empty($services)){
-            return $this->render('order/show.html.twig', array ('services' => $services));
+        if ($order !== null){
+            $services = $order->getServices();
+            $user = $this->getUser();
+            if (!empty($services)){
+                if ($this->isGranted("ROLE_USER") && $user === $order->getCar()->getOwner()){
+                    return $this->render('order/show.html.twig', array ('services' => $services));
+                }
+            }
         }
         return $this->redirectToRoute('order');
     }

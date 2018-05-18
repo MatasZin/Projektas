@@ -51,9 +51,13 @@ security:
     # Note: Only the *first* access control that matches will be used
     #access_denied_url: /login
     access_control:
-         - { path: ^/(login|register|confirm|reset), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/(login|register|confirm|reset), allow_if: "is_anonymous() and !is_authenticated()" }
+         - { path: ^/order, roles: ROLE_USER }
+         - { path: ^/worker, roles: ROLE_WORKER }
          - { path: ^/workers, roles: ROLE_ADMIN }
+         - { path: ^/Users, roles: ROLE_ADMIN }
          - { path: ^/Services/new, roles: ROLE_ADMIN }
          - { path: ^/Services/edit, roles: ROLE_ADMIN }
          - { path: ^/Services/remove, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/, role: IS_AUTHENTICATED_FULLY }

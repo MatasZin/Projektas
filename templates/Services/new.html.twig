@@ -3,5 +3,6 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
-    <a href="{{ path('Services') }}" class = modern>Go Back</a>
+    <hr>
+    <button class="modern" onclick="history.go(-1);">Go Back</button>
 {% endblock %}

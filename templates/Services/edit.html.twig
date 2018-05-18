@@ -3,5 +3,6 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
-    <a href="{{ path('Services') }}" class = modern>Cancel</a>
+    <hr>
+    <button class="modern" onclick="location.href='{{ path('Services') }}'">Cancel</button>
 {% endblock %}
