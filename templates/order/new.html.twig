@@ -19,7 +19,7 @@
         {{ form_errors(form1.selectedService) }}
         {{ form_label(form1.selectedService) }}<br>
         <div class="checkBoxBlock">
-            {% for batch in form1.selectedService|batch(6) %}
+            {% for batch in form1.selectedService|batch(10) %}
                 <div class="batchRow">
                     {% for option in batch %}
                         <div class="checkbox">
