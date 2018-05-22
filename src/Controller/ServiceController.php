@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Criteria\JobFilter;
 use App\Entity\Order;
 use App\Entity\OrderedService;
 use App\Entity\Services;
+use App\Form\JobOptionsType;
 use App\Form\ServiceType;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
@@ -122,20 +124,27 @@ class ServiceController extends Controller {
     }
 
     /**
-     * @Route("/worker/jobs", name="worker_jobs")
+     * @Route("/jobs", name="jobs")
      */
     public function worker_services(Request $request) {
 
-        $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findBy(array('worker' => $this->getUser()));
+        $form = $this->createForm(JobOptionsType::class);
+        $form->handleRequest($request);
+        $filter = new JobFilter($form);
+
+        $orderedServices = array();
+        if($this->isGranted("ROLE_WORKER"))
+            $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findByJobFilter($filter, $this->getUser());
 
         $workers = null;
         if($this->isGranted("ROLE_ADMIN")) {
+            $orderedServices = $this->getDoctrine()->getRepository(OrderedService::class)->findByJobFilter($filter, null);
             $workers = $this->getDoctrine()->getRepository(User::class)->findBy(array('role'=>'ROLE_WORKER'));
         }
 
         $this->jobs_editing($request, $orderedServices);
 
-        return $this->render('jobs/show_edit.html.twig', array('title' => "List of jobs", 'services' => $orderedServices, 'workers' => $workers));
+        return $this->render('jobs/show_edit.html.twig', array('title' => "List of jobs", 'services' => $orderedServices, 'workers' => $workers, 'form' =>$form->createView()));
     }
 
     private function jobs_editing(Request $request, $orderedServices) {

@@ -7,11 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OrderFilter
 {
-    private $completeness;
+    protected $completeness;
 
-    private $orderby;
+    protected $orderby;
 
-    private $sortorder;
+    protected $sortorder;
 
     public function __construct(Form $form)
     {

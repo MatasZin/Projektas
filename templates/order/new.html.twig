@@ -13,8 +13,23 @@
                 <span class="add-on"><i class="icon-th"></i></span>
             </div>
         </div>
-        {{ form_errors(form1) }}
-        {{ form_widget(form1) }}
+        {{ form_errors(form1.order.car) }}
+        {{ form_label(form1.order.car) }}
+        {{ form_widget(form1.order.car) }}
+        {{ form_errors(form1.selectedService) }}
+        {{ form_label(form1.selectedService) }}<br>
+        <div class="checkBoxBlock">
+            {% for batch in form1.selectedService|batch(6) %}
+                <div class="batchRow">
+                    {% for option in batch %}
+                        <div class="checkbox">
+                            {{ form_widget(option) }}
+                            {{ form_label(option) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
         {{ form_end(form1) }}
     {% elseif step == 2 %}
         <p>Congratulations! You are successfully register car to service.</p>

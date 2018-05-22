@@ -30,7 +30,7 @@
                     <li class="navBtn"><a class="{{ 'cars' in route ? 'active' }}" href="{{ path('cars') }}">Register a car</a></li>
                     <li class="navBtn"><a class="{{ 'order' in route ? 'active' }}" href="{{ path('order') }}">My orders</a></li>
                     {% elseif is_granted("ROLE_WORKER") or is_granted("ROLE_ADMIN") %}
-                        <li class="navBtn"><a class="{{ 'jobs' in route ? 'active' }}" href="{{ path('worker_jobs') }}">See list of jobs</a></li>
+                        <li class="navBtn"><a class="{{ 'jobs' in route ? 'active' }}" href="{{ path('jobs') }}">See list of jobs</a></li>
                     {% endif %}
                     {% if is_granted("ROLE_ADMIN") %}
                         <li class="navBtn"><a class="{{ 'user' in route ? 'active' }}" href="{{ path('users') }}">See list of clients</a></li>

@@ -4,6 +4,10 @@
 
     <h1>{{ title }}</h1>
     {% if services != null %}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        <br>
         <form action="" method="get">
             <table>
                 <thead>
@@ -54,6 +58,8 @@
             <br>
             <button type="submit" class="modern">Submit changes</button>
         </form>
+        <hr>
+        <button class="modern" onclick="history.go(-1);">Go Back</button>
     {% else %}
         <p>There are no ordered services!</p>
     {% endif %}

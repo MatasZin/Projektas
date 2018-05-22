@@ -212,3 +212,11 @@ td{
     color: red;
     margin-bottom: 20px;
 }
+.batchRow{
+    float: left;
+    margin-right: 30px;
+}
+.checkBoxBlock{
+    display: inline-flex;
+    margin-top: 5px;
+}
