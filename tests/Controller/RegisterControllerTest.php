@@ -50,7 +50,7 @@ class RegisterControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Register')->form();
         // set some values
-        $form['user[email]'] = 'Lucas@hotmail.com';
+        $form['user[email]'] = 'Lucas@kkkkssssm.com';
         $form['user[name]'] = 'Lucas';
         $form['user[second_name]'] = 'Mantas';
         $form['user[password][first]'] = '123456';
@@ -59,7 +59,6 @@ class RegisterControllerTest extends WebTestCase
         // submit the form
         $this->client->submit($form);
 
-        $this->client->followRedirect();
         //test response
         $this->assertEquals(200,
             $this->client->getResponse()->getStatusCode()
