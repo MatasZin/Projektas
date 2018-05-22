@@ -62,6 +62,9 @@
         <button class="modern" onclick="history.go(-1);">Go Back</button>
     {% else %}
         <p>There are no ordered services!</p>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
     {% endif %}
 
 {% endblock %}

@@ -39,5 +39,8 @@
         </table>
     {% else %}
         <h1>There are no orders placed!</h1>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
     {% endif %}
 {% endblock %}
