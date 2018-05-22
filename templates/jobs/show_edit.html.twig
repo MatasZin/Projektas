@@ -4,9 +4,11 @@
 
     <h1>{{ title }}</h1>
     {% if services != null %}
+        {% if form %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
+        {% endif %}
         <br>
         <form action="" method="get">
             <table>
@@ -62,9 +64,11 @@
         <button class="modern" onclick="history.go(-1);">Go Back</button>
     {% else %}
         <p>There are no ordered services!</p>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+        {% if form %}
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        {% endif %}
     {% endif %}
 
 {% endblock %}

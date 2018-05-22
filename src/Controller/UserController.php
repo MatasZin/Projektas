@@ -111,7 +111,7 @@ class UserController extends Controller {
             $form=$this->createForm(OrderOptionsType::class);
             $form->handleRequest($request);
             return $this->render('admin/orders/index.html.twig', array (
-                'form' => $form->createView(), 'message' => "List of orders:",'orders' => $orders));
+                'form' => null, 'message' => "List of orders:",'orders' => $orders));
         }
         return $this->redirectToRoute('homepage');
     }

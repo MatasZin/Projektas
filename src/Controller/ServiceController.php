@@ -120,7 +120,7 @@ class ServiceController extends Controller {
 
         $this->jobs_editing($request, $orderedServices);
 
-        return $this->render('jobs/show_edit.html.twig', array('workers' => $workers, 'title' => "List of all jobs:", 'services' => $orderedServices));
+        return $this->render('jobs/show_edit.html.twig', array('workers' => $workers, 'title' => "List of all jobs:", 'services' => $orderedServices, 'form' => null));
     }
 
     /**

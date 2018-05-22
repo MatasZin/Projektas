@@ -3,9 +3,11 @@
 {% block content %}
     {% if orders %}
         <h1>{{ message }}</h1>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+        {% if form %}
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        {% endif %}
         <br>
         <table>
             <tr>
@@ -39,8 +41,10 @@
         </table>
     {% else %}
         <h1>There are no orders placed!</h1>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+        {% if form %}
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        {% endif %}
     {% endif %}
 {% endblock %}
