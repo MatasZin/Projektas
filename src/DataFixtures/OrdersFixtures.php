@@ -27,6 +27,7 @@ class OrdersFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 20; $i++) {
             $order = new Order();
+            $order->setCompleted(1);
             $order->setCar(($this->getReference(CarsFixtures::CarsReffs[$i])));
             $order->setOrderDate(date_create(''.$year[mt_rand(0,2)].'-'.$month[mt_rand(0,11)].'-'.$day[mt_rand(0,27)].' '.$hour[mt_rand(0,8)].':00:00'));
             $manager->persist($order);
@@ -34,6 +35,7 @@ class OrdersFixtures extends Fixture implements DependentFixtureInterface
         }
         for ($i = 0; $i < 20; $i++) {
             $order = new Order();
+            $order->setCompleted(1);
             $order->setCar(($this->getReference(CarsFixtures::CarsReffs[$i])));
             $order->setOrderDate(date_create(''.$year[mt_rand(0,2)].'-'.$month[mt_rand(0,11)].'-'.$day[mt_rand(0,27)].' '.$hour[mt_rand(0,8)].':00:00'));
             $manager->persist($order);

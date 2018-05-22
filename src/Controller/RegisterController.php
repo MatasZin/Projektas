@@ -92,7 +92,7 @@ class RegisterController extends Controller
         {
             $this->get('session')->getFlashBag()->add(
                 'warning',
-                'Account with this confirmation token is not found!'
+                'Account with this confirmation token was not found!'
             );
             return $this->redirectToRoute('login');
         }
@@ -102,7 +102,7 @@ class RegisterController extends Controller
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'successful',
-            'Your account is confirm successfully. You can login now.'
+            'Your account was successfully confirmed. You can login now.'
         );
 
         return $this->redirectToRoute('login');

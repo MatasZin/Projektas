@@ -57,6 +57,8 @@ class UsersFixtures extends Fixture
             $user->setEmail('' . $name.$surname.$i.'@gmail.com');
             $password = $this->encoder->encodePassword($user, 'password');
             $user->setPassword($password);
+            $user->setIsDeleted(false);
+            $user->setIsActive(true);
             $manager->persist($user);
             $this->addReference(self::UsersReffs[$i], $user);
         }
@@ -70,6 +72,8 @@ class UsersFixtures extends Fixture
             $user->setEmail('' . $name.$surname.$i.'@gmail.com');
             $password = $this->encoder->encodePassword($user, 'password');
             $user->setPassword($password);
+            $user->setIsDeleted(false);
+            $user->setIsActive(true);
             $manager->persist($user);
             $this->addReference(self::WorkersReffs[25-$i], $user);
         }
@@ -80,6 +84,8 @@ class UsersFixtures extends Fixture
         $user->setEmail('admin@admin.com');
         $password = $this->encoder->encodePassword($user, 'admin');
         $user->setPassword($password);
+        $user->setIsDeleted(false);
+        $user->setIsActive(true);
         $manager->persist($user);
 
         $user = new User();
@@ -89,6 +95,8 @@ class UsersFixtures extends Fixture
         $user->setEmail('paprastas@paprastas.com');
         $password = $this->encoder->encodePassword($user, 'paprastas');
         $user->setPassword($password);
+        $user->setIsDeleted(false);
+        $user->setIsActive(true);
         $manager->persist($user);
         $this->addReference(self::UsersReffs[20], $user);
 
@@ -99,6 +107,8 @@ class UsersFixtures extends Fixture
         $user->setEmail('worker@worker.com');
         $password = $this->encoder->encodePassword($user, 'worker');
         $user->setPassword($password);
+        $user->setIsDeleted(false);
+        $user->setIsActive(true);
         $manager->persist($user);
         $this->addReference(self::WorkersReffs[6], $user);
 
