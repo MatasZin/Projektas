@@ -24,6 +24,7 @@ class ServicesFixtures extends Fixture
             $service->setTitle('service' . $i);
             $service->setPrice(mt_rand(10, 100));
             $service->setDescription('You can add descriotion of service here');
+            $service->setIsActive(true);
             $manager->persist($service);
             $this->addReference(self::ServicesReffs[$i], $service);
         }

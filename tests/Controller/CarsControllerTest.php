@@ -17,8 +17,8 @@ class CarsControllerTest extends WebTestCase
     {
         parent::setUp();
         $this->client = $this->createClient(array(), array(
-            'PHP_AUTH_USER' => 'Matas@gmail.com',
-            'PHP_AUTH_PW'   => 'matas123',
+            'PHP_AUTH_USER' => 'admin@admin.com',
+            'PHP_AUTH_PW'   => 'admin',
         ));
         $this->client->disableReboot();
         $this->em = static::$kernel->getContainer()
@@ -52,7 +52,7 @@ class CarsControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/cars');
 
         $form = $crawler->selectButton('Add car')->form();
-        $form['car[licensePlate]'] = 'BNA 447';
+        $form['car[licensePlate]'] = 'BNA447';
         $this->client->submit($form);
         $this->client->followRedirect();
         //test response
@@ -62,7 +62,7 @@ class CarsControllerTest extends WebTestCase
         $car = $this->em
             ->getRepository(Car::class)
             ->findBy(array(
-                'licensePlate' => 'BNA 447',
+                'licensePlate' => 'BNA447',
             ));
         $this->assertCount(1, $car);
     }

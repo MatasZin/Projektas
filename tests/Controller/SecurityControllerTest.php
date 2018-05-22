@@ -21,8 +21,8 @@ class SecurityControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/login');
         $form = $crawler->selectButton('Login')->form(array(
-           '_email' => 'Matas@gmail.com',
-           '_password' => 'mata123',
+           '_email' => 'admin@admin.com',
+           '_password' => 'adddddd',
         ));
 
         // submit the form
@@ -40,8 +40,8 @@ class SecurityControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/login');
         $form = $crawler->selectButton('Login')->form(array(
-            '_email' => 'Matas@gmail.com',
-            '_password' => 'matas123',
+            '_email' => 'admin@admin.com',
+            '_password' => 'admin',
         ));
 
         // submit the form
