@@ -128,7 +128,7 @@ class SecurityController extends Controller
 
     public function sendResetingPasswordLink($email, $token, $name, \Swift_Mailer $mailer){
         $message = (new \Swift_Message('Password recovery'))
-            ->setFrom(['paumanma@gmail.com' => 'PauManMa services'])
+            ->setFrom(['paumanma@gmail.com' => 'TeamPMM services'])
             ->setTo($email)
             ->setBody(
                 $this->renderView('emails/resettingPassword.html.twig', array(

@@ -58,7 +58,7 @@ class RegisterController extends Controller
 
     public function sendConfirmationEmail($email, $token, $name, \Swift_Mailer $mailer){
         $message = (new \Swift_Message('Registration confirmation'))
-            ->setFrom(['paumanma@gmail.com' => 'PauManMa services'])
+            ->setFrom(['paumanma@gmail.com' => 'TeamPMM services'])
             ->setTo($email)
             ->setBody(
                 $this->renderView('emails/registration.html.twig', array(

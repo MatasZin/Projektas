@@ -14,7 +14,7 @@
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />
         <env name="SHELL_VERBOSITY" value="-1" />
-        <env name="DATABASE_URL" value="mysql://root:m1a2t3a4s5@127.0.0.1:3306//Garaz" />
+        <env name="DATABASE_URL" value="mysql://root:Mantas.123@127.0.0.1:3306/servisas" />
         <!-- define your env variables for the test env here -->
     </php>
 
